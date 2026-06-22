@@ -1,0 +1,161 @@
+.admin-header {
+  padding: 40px 0;
+  text-align: center;
+  background: linear-gradient(135deg, rgba(176, 138, 90, 0.08), rgba(176, 138, 90, 0.03));
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+/* Summary */
+.admin-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 40px 0;
+}
+
+.summary-card {
+  text-align: center;
+  padding: 28px 16px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.74));
+  border: 1px solid var(--line);
+  box-shadow: 0 14px 34px rgba(84, 64, 43, 0.08);
+}
+
+.summary-num {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.summary-label {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+
+/* Filters */
+.admin-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.filter-btn {
+  font-size: 0.85rem;
+  padding: 10px 20px;
+}
+
+.filter-btn.btn-primary.active {
+  background: linear-gradient(135deg, #c9a97b, #a57d4f);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(165, 125, 79, 0.28);
+}
+
+.filter-btn.btn-secondary.active {
+  background: rgba(176, 138, 90, 0.12);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+/* Table */
+.admin-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 60px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.74));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 14px 34px rgba(84, 64, 43, 0.08);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-table th {
+  background: rgba(176, 138, 90, 0.06);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tr:hover td {
+  background: rgba(176, 138, 90, 0.04);
+}
+
+.admin-table .token-cell {
+  font-family: monospace;
+  font-size: 0.75rem;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badge-confirmado {
+  background: rgba(79, 122, 84, 0.10);
+  color: var(--success);
+}
+
+.badge-pendiente {
+  background: rgba(176, 138, 90, 0.10);
+  color: var(--gold);
+}
+
+.badge-rechazado {
+  background: rgba(159, 79, 79, 0.10);
+  color: var(--danger);
+}
+
+@media (max-width: 768px) {
+  .admin-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+}

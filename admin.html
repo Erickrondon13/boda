@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Boda Erick & Telma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <div class="container">
+      <h1>Panel de Administración</h1>
+      <p class="muted">Boda Erick &amp; Telma — Gestión de invitados y RSVP</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Resumen -->
+    <section class="admin-summary">
+      <div class="summary-card">
+        <span class="summary-num" id="totalCount">0</span>
+        <span class="summary-label">Total Invitados</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-num" id="confirmedCount">0</span>
+        <span class="summary-label">Confirmados</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-num" id="pendingCount">0</span>
+        <span class="summary-label">Pendientes</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-num" id="declinedCount">0</span>
+        <span class="summary-label">Rechazados</span>
+      </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="admin-filters">
+      <button class="btn btn-primary filter-btn active" data-filter="all">Todos</button>
+      <button class="btn btn-secondary filter-btn" data-filter="pendiente">Pendientes</button>
+      <button class="btn btn-secondary filter-btn" data-filter="confirmado">Confirmados</button>
+      <button class="btn btn-secondary filter-btn" data-filter="rechazado">Rechazados</button>
+    </section>
+
+    <!-- Tabla -->
+    <section class="admin-table-wrap">
+      <div id="adminLoading" class="status-box status-info show">Cargando invitados...</div>
+      <div id="adminError" class="status-box status-error"></div>
+      <table class="admin-table" id="adminTable">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Cupos</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Confirmados</th>
+            <th>Teléfono</th>
+            <th>Mensaje</th>
+            <th>Token / Link</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
