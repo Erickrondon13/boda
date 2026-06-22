@@ -106,6 +106,18 @@ body {
     letter-spacing: 0.08em;
 }
 
+.hero-guest {
+    margin: 12px 0 0;
+    font-size: 1.05rem;
+    opacity: 0.85;
+}
+
+.intro-guest {
+    margin: 12px 0 0;
+    font-style: italic;
+    color: var(--muted);
+}
+
 .card {
     background: var(--card);
     backdrop-filter: blur(10px);

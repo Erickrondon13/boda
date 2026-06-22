@@ -14,7 +14,9 @@ async function initInvitation() {
         currentId = getIdFromUrl();
 
         if (!currentId) {
-            throw new Error('No se encontró el ID de invitación en la URL.');
+            guestLoading.classList.add('hidden');
+            guestContent.classList.remove('hidden');
+            return;
         }
 
         const guest = await fetchGuest(currentId);
@@ -58,9 +60,17 @@ function renderGuestInfo(guest) {
     const confirmedCount = document.getElementById('confirmedCount');
     const companionsGroup = document.getElementById('companionsGroup');
     const attendanceSelect = document.getElementById('attendanceSelect');
+    const guestWelcome = document.getElementById('guestWelcome');
+    const guestIntro = document.getElementById('guestIntro');
 
     guestNameEl.textContent = guest.nombre_apellido;
     guestSlotsEl.textContent = guest.cupos;
+
+    guestWelcome.textContent = `Te invitamos, ${guest.nombre_apellido}`;
+    guestWelcome.classList.remove('hidden');
+
+    guestIntro.textContent = `${guest.nombre_apellido}, estamos muy felices de que nos acompañes en este día tan especial.`;
+    guestIntro.classList.remove('hidden');
 
     fillConfirmedCountOptions(confirmedCount, guest.cupos);
 
