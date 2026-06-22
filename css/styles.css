@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+
 :root {
   --color-bg: #faf6f0;
   --color-primary: #2c3e36;
@@ -21,7 +22,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 body {
