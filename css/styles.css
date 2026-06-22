@@ -1,0 +1,785 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #faf6f0;
+  --color-primary: #2c3e36;
+  --color-gold: #c4a265;
+  --color-gold-light: #e8d5a3;
+  --color-rose: #d4a5a5;
+  --color-rose-light: #f0e0e0;
+  --color-text: #3d3d3d;
+  --color-text-light: #7a7a7a;
+  --color-white: #ffffff;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ======== HERO / BANNER ======== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--color-white);
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(44, 62, 54, 0.75) 0%,
+    rgba(44, 62, 54, 0.45) 50%,
+    rgba(30, 30, 40, 0.7) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  max-width: 800px;
+}
+
+.hero-subtitle {
+  font-size: 0.9rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.9;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 600;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.hero-title span {
+  display: block;
+  font-size: 0.5em;
+  font-weight: 300;
+  letter-spacing: 8px;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.hero-date {
+  font-size: 1rem;
+  letter-spacing: 3px;
+  opacity: 0.9;
+  margin-top: 1rem;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  animation: bounce 2s infinite;
+  cursor: pointer;
+}
+
+.scroll-indicator svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: var(--color-white);
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+  40% { transform: translateX(-50%) translateY(-10px); }
+  60% { transform: translateX(-50%) translateY(-5px); }
+}
+
+/* ======== SECCIONES ======== */
+.section {
+  padding: 5rem 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 2px;
+  background: var(--color-gold);
+  margin: 1rem auto 0;
+}
+
+.divider {
+  text-align: center;
+  color: var(--color-gold);
+  font-size: 1.5rem;
+  padding: 2rem 0;
+  letter-spacing: 8px;
+}
+
+/* ======== FRASE ======== */
+.frase {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.frase p {
+  font-family: var(--font-heading);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  line-height: 1.8;
+  color: var(--color-text);
+  font-style: italic;
+}
+
+.frase .ampersand {
+  color: var(--color-gold);
+  font-style: normal;
+}
+
+/* ======== FECHA Y CRONOMETRO ======== */
+.fecha-section {
+  text-align: center;
+  padding: 4rem 1.5rem;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1a2e26 100%);
+  color: var(--color-white);
+}
+
+.fecha-section .section-title {
+  color: var(--color-white);
+}
+
+.fecha-section .section-title::after {
+  background: var(--color-gold);
+}
+
+.fecha-texto {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  margin-bottom: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.countdown-numero {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--color-gold);
+}
+
+.countdown-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+.countdown-sep {
+  font-size: 2rem;
+  color: var(--color-gold-light);
+  align-self: flex-start;
+  padding-top: 0.5rem;
+  opacity: 0.5;
+}
+
+/* ======== LUGAR ======== */
+.lugar-section {
+  text-align: center;
+  padding: 5rem 1.5rem;
+}
+
+.lugar-nombre {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.lugar-descripcion {
+  color: var(--color-text-light);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.btn-ubicacion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.5rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-ubicacion:hover {
+  background: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(196, 162, 101, 0.3);
+}
+
+/* ======== ITINERARIO ======== */
+.itinerario-section {
+  background: var(--color-white);
+}
+
+.itinerario {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.itinerario-item {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid rgba(196, 162, 101, 0.2);
+  align-items: flex-start;
+}
+
+.itinerario-item:last-child {
+  border-bottom: none;
+}
+
+.itinerario-hora {
+  min-width: 80px;
+  font-weight: 600;
+  color: var(--color-gold);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+}
+
+.itinerario-contenido {
+  flex: 1;
+}
+
+.itinerario-texto {
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.itinerario-icono {
+  font-size: 1.3rem;
+  line-height: 1;
+  margin-top: 0.2rem;
+}
+
+/* ======== CODIGO DE VESTIMENTA ======== */
+.vestimenta-section {
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-rose-light) 0%, #faf6f0 100%);
+}
+
+.vestimenta-grid {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.vestimenta-item {
+  text-align: center;
+}
+
+.vestimenta-icono {
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+.vestimenta-label {
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+/* ======== REGALOS ======== */
+.regalos-section {
+  text-align: center;
+}
+
+.regalos-icono {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.regalos-texto {
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.regalos-opciones {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.regalos-opcion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2rem;
+  background: var(--color-white);
+  border: 1px solid var(--color-gold-light);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: var(--transition);
+  min-width: 280px;
+  justify-content: center;
+}
+
+.regalos-opcion:hover {
+  border-color: var(--color-gold);
+  box-shadow: 0 4px 15px rgba(196, 162, 101, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ======== RSVP ======== */
+.rsvp-section {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1a2e26 100%);
+  color: var(--color-white);
+  text-align: center;
+  padding: 5rem 1.5rem;
+}
+
+.rsvp-section .section-title {
+  color: var(--color-white);
+}
+
+.rsvp-section .section-title::after {
+  background: var(--color-gold);
+}
+
+.rsvp-saludo {
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin-bottom: 0.5rem;
+}
+
+.rsvp-cupos {
+  color: var(--color-gold-light);
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.rsvp-botones {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.btn-rsvp {
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 2px solid var(--color-gold);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+.btn-asistir {
+  background: var(--color-gold);
+  color: var(--color-primary);
+}
+
+.btn-asistir:hover {
+  background: transparent;
+  color: var(--color-gold);
+}
+
+.btn-no-asistir {
+  background: transparent;
+  color: var(--color-gold);
+}
+
+.btn-no-asistir:hover {
+  background: var(--color-gold);
+  color: var(--color-primary);
+}
+
+.btn-seleccionado {
+  background: var(--color-gold) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-gold) !important;
+}
+
+/* ======== FORMULARIO RSVP ======== */
+.rsvp-form {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: left;
+  display: none;
+}
+
+.rsvp-form.mostrar {
+  display: block;
+  animation: fadeUp 0.5s ease;
+}
+
+.form-grupo {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  opacity: 0.8;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.form-select option {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.form-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.btn-enviar {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-gold);
+  color: var(--color-primary);
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.btn-enviar:hover {
+  background: var(--color-white);
+  transform: translateY(-2px);
+}
+
+.btn-enviar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ======== CONFIRMACION ======== */
+.confirmacion {
+  display: none;
+  text-align: center;
+  animation: fadeUp 0.6s ease;
+}
+
+.confirmacion.mostrar {
+  display: block;
+}
+
+.confirmacion-icono {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.confirmacion-titulo {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: 0.8rem;
+}
+
+.confirmacion-texto {
+  color: var(--color-gold-light);
+  font-size: 0.95rem;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.btn-cancelar {
+  margin-top: 2rem;
+  padding: 0.7rem 2rem;
+  background: transparent;
+  color: var(--color-rose);
+  border: 1px solid var(--color-rose);
+  border-radius: 50px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+
+.btn-cancelar:hover {
+  background: rgba(212, 165, 165, 0.1);
+}
+
+/* ======== TOKEN NO VALIDO ======== */
+.token-error {
+  display: none;
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.token-error.mostrar {
+  display: block;
+}
+
+.token-error h2 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+.token-error p {
+  color: var(--color-text-light);
+}
+
+/* ======== CARGA / SPINNER ======== */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-gold-light);
+  border-top-color: var(--color-gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ======== ANIMACIONES ======== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ======== MUSIC PLAYER ======== */
+.music-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 100;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: none;
+  color: var(--color-white);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-toggle:hover {
+  background: var(--color-gold);
+  transform: scale(1.05);
+}
+
+.music-toggle.paused {
+  opacity: 0.6;
+}
+
+/* ======== FOOTER ======== */
+.footer {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--color-primary);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.footer span {
+  color: var(--color-gold);
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 600px) {
+  .section {
+    padding: 3rem 1.2rem;
+  }
+
+  .countdown {
+    gap: 0.8rem;
+  }
+
+  .countdown-item {
+    min-width: 60px;
+  }
+
+  .countdown-sep {
+    display: none;
+  }
+
+  .itinerario-item {
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 1rem 0;
+  }
+
+  .itinerario-hora {
+    min-width: auto;
+  }
+
+  .vestimenta-grid {
+    gap: 2rem;
+  }
+
+  .rsvp-botones {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-rsvp {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .section {
+    padding: 6rem 2rem;
+  }
+}

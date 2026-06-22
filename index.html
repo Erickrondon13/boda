@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erick & Telma - Nuestra Boda</title>
+  <meta name="description" content="Invitación de Boda - Erick & Telma - 15 de Noviembre 2026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ====== HERO / BANNER ====== -->
+  <header class="hero" id="hero">
+    <div class="hero-bg">
+      <!--
+        ====================================================
+          REEMPLAZA ESTA IMAGEN CON LA FOTO DE LOS NOVIOS
+          Coloca tu imagen en /img/foto-novios.jpg o usa una URL externa
+        ====================================================
+      -->
+      <img
+        src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80"
+        alt="Erick & Telma"
+        loading="lazy"
+      />
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <p class="hero-subtitle">Nos casamos</p>
+      <h1 class="hero-title">
+        Erick &amp; Telma
+        <span>15 · 11 · 2026</span>
+      </h1>
+      <p class="hero-date">Salsipuedes, Colombia</p>
+    </div>
+
+    <div class="scroll-indicator" onclick="document.getElementById('frase').scrollIntoView({behavior:'smooth'})">
+      <svg viewBox="0 0 24 24">
+        <path d="M7 13l5 5 5-5M7 6l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </header>
+
+  <!-- ====== FRASE ====== -->
+  <section class="frase" id="frase">
+    <p>
+      Con el amor que nos une, la bendición de Dios y el apoyo de nuestros padres,
+      te invitamos a celebrar el día más especial de nuestras vidas.
+    </p>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <!-- ====== FECHA Y CRONOMETRO ====== -->
+  <section class="fecha-section" id="fecha">
+    <h2 class="section-title">Cuenta Regresiva</h2>
+    <p class="fecha-texto">15 de Noviembre de 2026</p>
+
+    <div class="countdown" id="countdown">
+      <div class="countdown-item">
+        <span class="countdown-numero" id="cd-dias">00</span>
+        <span class="countdown-label">Días</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-item">
+        <span class="countdown-numero" id="cd-horas">00</span>
+        <span class="countdown-label">Horas</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-item">
+        <span class="countdown-numero" id="cd-minutos">00</span>
+        <span class="countdown-label">Minutos</span>
+      </div>
+      <span class="countdown-sep">:</span>
+      <div class="countdown-item">
+        <span class="countdown-numero" id="cd-segundos">00</span>
+        <span class="countdown-label">Segundos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== LUGAR ====== -->
+  <section class="section lugar-section" id="lugar">
+    <h2 class="section-title">Lugar</h2>
+    <p class="lugar-nombre">Salsipuedes</p>
+    <p class="lugar-descripcion">
+      Un lugar mágico rodeado de naturaleza para celebrar nuestro amor.
+    </p>
+    <a
+      class="btn-ubicacion"
+      href="https://www.google.com/maps/search/Salsipuedes+Colombia"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      Ver Ubicación
+    </a>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <!-- ====== ITINERARIO ====== -->
+  <section class="section itinerario-section" id="itinerario">
+    <h2 class="section-title">Itinerario</h2>
+
+    <div class="itinerario">
+      <div class="itinerario-item">
+        <span class="itinerario-icono">💍</span>
+        <span class="itinerario-hora">4:00 PM</span>
+        <div class="itinerario-contenido">
+          <p class="itinerario-texto">Ceremonia</p>
+        </div>
+      </div>
+
+      <div class="itinerario-item">
+        <span class="itinerario-icono">📸</span>
+        <span class="itinerario-hora">5:30 PM</span>
+        <div class="itinerario-contenido">
+          <p class="itinerario-texto">Sesión de Fotos</p>
+        </div>
+      </div>
+
+      <div class="itinerario-item">
+        <span class="itinerario-icono">🥂</span>
+        <span class="itinerario-hora">6:30 PM</span>
+        <div class="itinerario-contenido">
+          <p class="itinerario-texto">Cena y Brindis</p>
+        </div>
+      </div>
+
+      <div class="itinerario-item">
+        <span class="itinerario-icono">✨</span>
+        <span class="itinerario-hora">9:30 PM</span>
+        <div class="itinerario-contenido">
+          <p class="itinerario-texto">Cierre de la Velada</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <!-- ====== CODIGO DE VESTIMENTA ====== -->
+  <section class="section vestimenta-section" id="vestimenta">
+    <h2 class="section-title">Código de Vestimenta</h2>
+    <div class="vestimenta-grid">
+      <div class="vestimenta-item">
+        <span class="vestimenta-icono">🤵</span>
+        <p class="vestimenta-label">Formal</p>
+      </div>
+      <div class="vestimenta-item">
+        <span class="vestimenta-icono">👗</span>
+        <p class="vestimenta-label">Largo</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <!-- ====== REGALOS ====== -->
+  <section class="section regalos-section" id="regalos">
+    <span class="regalos-icono">🎁</span>
+    <h2 class="section-title">Regalos</h2>
+    <p class="regalos-texto">
+      Su presencia es nuestro mejor regalo. Pero si desean tener un detalle con nosotros:
+    </p>
+    <div class="regalos-opciones">
+      <div class="regalos-opcion">
+        <span>💌</span>
+        <span>Lluvia de Sobres</span>
+      </div>
+      <div class="regalos-opcion">
+        <span>📬</span>
+        <span>Buzón en recepción</span>
+      </div>
+      <div class="regalos-opcion">
+        <span>✉️</span>
+        <span>Transferencia o Nequi</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">✦ ✦ ✦</div>
+
+  <!-- ====== RSVP ====== -->
+  <section class="rsvp-section" id="rsvp">
+    <div id="rsvp-loading">
+      <div class="loading">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <div id="token-error" class="token-error">
+      <h2>Invitación no encontrada</h2>
+      <p>El enlace no es válido o ha expirado. Por favor contacta a los novios.</p>
+    </div>
+
+    <div id="rsvp-content" style="display:none;">
+      <h2 class="section-title">Confirma tu Asistencia</h2>
+
+      <p class="rsvp-saludo" id="rsvp-saludo">Hola, <span id="invitado-nombre"></span></p>
+      <p class="rsvp-cupos" id="rsvp-cupos">Hemos reservado <span id="invitado-cupos"></span> lugares para ustedes</p>
+
+      <!-- Botones de decisión -->
+      <div class="rsvp-botones" id="rsvp-botones">
+        <button class="btn-rsvp btn-asistir" onclick="seleccionarAsistencia(true)">
+          ¡Sí, asistiré! 🎉
+        </button>
+        <button class="btn-rsvp btn-no-asistir" onclick="seleccionarAsistencia(false)">
+          No podré asistir 😢
+        </button>
+      </div>
+
+      <!-- Formulario (se muestra al elegir "Sí asistiré") -->
+      <div class="rsvp-form" id="rsvp-form">
+        <div class="form-grupo">
+          <label class="form-label" for="cantidad">¿Cuántos asistirán?</label>
+          <select class="form-select" id="cantidad">
+            <option value="1">1 persona</option>
+            <option value="2">2 personas</option>
+            <option value="3">3 personas</option>
+            <option value="4">4 personas</option>
+          </select>
+        </div>
+        <div class="form-grupo">
+          <label class="form-label" for="telefono">Teléfono (opcional)</label>
+          <input class="form-input" type="tel" id="telefono" placeholder="300 123 4567" />
+        </div>
+        <div class="form-grupo">
+          <label class="form-label" for="mensaje">Mensaje (opcional)</label>
+          <textarea class="form-textarea" id="mensaje" placeholder="¡Allá estaremos con mucho cariño!" rows="3"></textarea>
+        </div>
+        <button class="btn-enviar" id="btn-enviar" onclick="enviarConfirmacion()">
+          Confirmar Asistencia
+        </button>
+      </div>
+
+      <!-- Confirmación exitosa -->
+      <div class="confirmacion" id="confirmacion">
+        <span class="confirmacion-icono">💌</span>
+        <h3 class="confirmacion-titulo">¡Confirmación Recibida!</h3>
+        <p class="confirmacion-texto">
+          ¡Qué alegría! Ya contamos contigo para el gran día.
+          <br /><br />
+          <strong>Erick Rondón</strong> y <strong>Telma Verónica</strong> 💕
+        </p>
+        <button class="btn-cancelar" onclick="cancelarConfirmacion()">
+          Cancelar confirmación
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== MUSIC PLAYER ====== -->
+  <audio id="bg-music" loop preload="none">
+    <!--
+      ====================================================
+        OPCIONAL: Agrega una canción romántica de fondo
+        Coloca tu archivo MP3 en /musica/cancion.mp3
+      ====================================================
+    -->
+    <source src="" type="audio/mpeg" />
+  </audio>
+  <button class="music-toggle paused" id="music-toggle" onclick="toggleMusic()" aria-label="Reproducir música">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+  </button>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <p>Hecho con <span>❤</span> para nuestros invitados</p>
+    <p style="margin-top:0.3rem;font-size:0.7rem;">Erick & Telma · 2026</p>
+  </footer>
+
+  <!-- ====== SCRIPTS ====== -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
