@@ -1,11 +1,11 @@
-# /boda-erick-telma
+# /boda
 
 Invitación de boda interactiva con RSVP conectado a Supabase.
 
 ## Estructura
 
 ```
-/boda-erick-telma
+/boda
 │
 ├── index.html             # Página principal de invitación
 ├── admin.html             # Panel de administración

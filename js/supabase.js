@@ -8,5 +8,5 @@ const supabaseClient = window.supabase.createClient(
 
 // URL base de tu invitación pública en GitHub Pages.
 // Ejemplo:
-// https://erickrondon.github.io/boda-erick-telma/
-const PUBLIC_INVITATION_BASE_URL = 'https://Erickrondon13.github.io/boda/';
+// https://erickrondon13.github.io/boda/
+const PUBLIC_INVITATION_BASE_URL = 'https://erickrondon13.github.io/boda/';

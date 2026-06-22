@@ -11,6 +11,6 @@ select
     i.fecha_confirmacion,
     i.created_at,
     i.updated_at,
-    'https://Erickrondon13.github.io/boda/?id=' || i.token::text as link_invitacion
+    'https://erickrondon13.github.io/boda/?id=' || i.token::text as link_invitacion
 from public.invitados i
 order by i.nombre_apellido;
