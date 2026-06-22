@@ -1,23 +1,36 @@
 export default function Lugar() {
   return (
-    <section className="section lugar-section" id="lugar">
-      <h2 className="section-title">Lugar</h2>
-      <p className="lugar-nombre">Salsipuedes</p>
-      <p className="lugar-descripcion">
-        Un lugar mágico rodeado de naturaleza para celebrar nuestro amor.
-      </p>
-      <a
-        className="btn-ubicacion"
-        href="https://www.google.com/maps/search/Salsipuedes+Colombia"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
-        Ver Ubicación
-      </a>
+    <section className="section" id="ubicacion">
+      <div className="container">
+        <div className="section-title fade-up">Lugar</div>
+        <h2 className="section-heading fade-up">Salsipuedes</h2>
+        <p className="section-subtitle fade-up">
+          El lugar donde celebraremos el comienzo de nuestra historia como esposos.
+        </p>
+
+        <div className="location-card glass-card fade-up">
+          <div className="location-copy">
+            <span className="location-badge">📍 Medellín, Antioquia</span>
+            <h3>Salsipuedes</h3>
+            <p>
+              Hemos preparado este día con muchísimo amor y nos encantará compartirlo contigo
+              en un ambiente elegante, cálido y lleno de momentos inolvidables.
+            </p>
+
+            <a
+              className="btn btn-primary"
+              href="https://maps.google.com/?q=Salsipuedes+Medellin"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ width: 'fit-content' }}
+            >
+              Ver ubicación
+            </a>
+          </div>
+
+          <div className="location-side" aria-label="Foto decorativa de la boda" />
+        </div>
+      </div>
     </section>
   )
 }

@@ -1,47 +1,26 @@
-import { useEffect, useRef } from 'react'
-
 export default function Hero() {
-  const heroRef = useRef(null)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return
-      const scrolled = window.scrollY
-      const hero = heroRef.current
-      hero.style.transform = `translateY(${scrolled * 0.3}px)`
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const scrollToFrase = () => {
-    document.getElementById('frase')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <header className="hero">
-      <div className="hero-bg" ref={heroRef}>
-        <img
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80"
-          alt="Erick & Telma"
-          loading="lazy"
-        />
-      </div>
-      <div className="hero-overlay" />
+      <div className="container hero-content">
+        <div className="hero-card">
+          <span className="eyebrow">Invitación de boda</span>
 
-      <div className="hero-content">
-        <p className="hero-subtitle">Nos casamos</p>
-        <h1 className="hero-title">
-          Erick &amp; Telma
-          <span>15 · 11 · 2026</span>
-        </h1>
-        <p className="hero-date">Salsipuedes, Colombia</p>
-      </div>
+          <h1>
+            Erick <span className="ampersand">&amp;</span> Telma
+          </h1>
 
-      <div className="scroll-indicator" onClick={scrollToFrase}>
-        <svg viewBox="0 0 24 24">
-          <path d="M7 13l5 5 5-5M7 6l5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+          <p>
+            Con el amor que nos une, la bendición de Dios y el apoyo de nuestros padres,
+            te invitamos a celebrar el día más especial de nuestras vidas.
+          </p>
+
+          <div className="hero-date">15 de noviembre 2026</div>
+
+          <div className="hero-actions">
+            <a href="#ubicacion" className="btn btn-primary">Ver detalles</a>
+            <a href="#invitados" className="btn btn-secondary">Confirmar asistencia</a>
+          </div>
+        </div>
       </div>
     </header>
   )

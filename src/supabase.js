@@ -8,21 +8,23 @@ const supabase = createClient(
 export async function getInvitadoByToken(token) {
   const { data, error } = await supabase
     .from('invitados')
-    .select('*')
+    .select('id, nombre_apellido, cupos_reservados, rol, token, activo')
     .eq('token', token)
     .eq('activo', true)
     .single()
+
   if (error) return null
   return data
 }
 
-export async function getConfirmacionByInvitadoId(invitadoId) {
+export async function getRsvpByInvitadoId(invitadoId) {
   const { data, error } = await supabase
-    .from('rsvp_confirmaciones')
-    .select('*')
-    .eq('invitado_id', invitadoId)
+    .from('vw_invitados_rsvp')
+    .select('asiste, cantidad_confirmada, telefono, mensaje, estado_rsvp')
+    .eq('id', invitadoId)
     .single()
-  if (error && error.code !== 'PGRST116') throw error
+
+  if (error || !data || data.estado_rsvp === 'pendiente') return null
   return data
 }
 
@@ -34,6 +36,7 @@ export async function confirmarAsistencia(token, asiste, cantidadConfirmada, tel
     p_telefono: telefono || null,
     p_mensaje: mensaje || null,
   })
+
   if (error) throw error
   return data
 }
@@ -41,9 +44,11 @@ export async function confirmarAsistencia(token, asiste, cantidadConfirmada, tel
 export async function cancelarConfirmacion(token) {
   const invitado = await getInvitadoByToken(token)
   if (!invitado) throw new Error('Invitado no encontrado')
+
   const { error } = await supabase
     .from('rsvp_confirmaciones')
     .delete()
     .eq('invitado_id', invitado.id)
+
   if (error) throw error
 }
