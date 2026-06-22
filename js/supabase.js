@@ -1,6 +1,6 @@
 const SUPABASE_CONFIG = {
-  url: 'https://tu-proyecto.supabase.co',
-  anonKey: 'tu-anon-key-publica'
+  url: 'https://ahircojwakbjajzzwvgc.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoaXJjb2p3YWtiamFqenp3dmdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzczMDgsImV4cCI6MjA5NzcxMzMwOH0.B8sWIxbdVJC_a7UIu62--vCKuJ6U1VGsRoNLj-kMX2Q'
 };
 
 let supabaseClient = null;
