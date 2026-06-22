@@ -1,76 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin - Boda Erick & Telma</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/admin.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Erick & Telma</title>
+
+    <link rel="stylesheet" href="css/admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header class="admin-header">
-    <div class="container">
-      <h1>Panel de Administración</h1>
-      <p class="muted">Boda Erick &amp; Telma — Gestión de invitados y RSVP</p>
-    </div>
-  </header>
+    <main class="admin-page">
+        <header class="admin-header">
+            <div>
+                <p class="admin-kicker">Panel de administración</p>
+                <h1>Erick & Telma</h1>
+            </div>
 
-  <main class="container">
-    <!-- Resumen -->
-    <section class="admin-summary">
-      <div class="summary-card">
-        <span class="summary-num" id="totalCount">0</span>
-        <span class="summary-label">Total Invitados</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-num" id="confirmedCount">0</span>
-        <span class="summary-label">Confirmados</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-num" id="pendingCount">0</span>
-        <span class="summary-label">Pendientes</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-num" id="declinedCount">0</span>
-        <span class="summary-label">Rechazados</span>
-      </div>
-    </section>
+            <div class="admin-actions-top">
+                <button class="btn" id="btnRefresh">Actualizar</button>
+                <button class="btn btn-primary" id="btnCopyAllLinks">Copiar todos los links</button>
+                <button class="btn" id="btnExportCsv">Exportar CSV</button>
+            </div>
+        </header>
 
-    <!-- Filtros -->
-    <section class="admin-filters">
-      <button class="btn btn-primary filter-btn active" data-filter="all">Todos</button>
-      <button class="btn btn-secondary filter-btn" data-filter="pendiente">Pendientes</button>
-      <button class="btn btn-secondary filter-btn" data-filter="confirmado">Confirmados</button>
-      <button class="btn btn-secondary filter-btn" data-filter="rechazado">Rechazados</button>
-    </section>
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">Invitados</span>
+                <strong id="statTotal">0</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Confirmados</span>
+                <strong id="statConfirmed">0</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Pendientes</span>
+                <strong id="statPending">0</strong>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">Personas confirmadas</span>
+                <strong id="statConfirmedPeople">0</strong>
+            </div>
+        </section>
 
-    <!-- Tabla -->
-    <section class="admin-table-wrap">
-      <div id="adminLoading" class="status-box status-info show">Cargando invitados...</div>
-      <div id="adminError" class="status-box status-error"></div>
-      <table class="admin-table" id="adminTable">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Cupos</th>
-            <th>Rol</th>
-            <th>Estado</th>
-            <th>Confirmados</th>
-            <th>Teléfono</th>
-            <th>Mensaje</th>
-            <th>Token / Link</th>
-          </tr>
-        </thead>
-        <tbody id="adminTableBody"></tbody>
-      </table>
-    </section>
-  </main>
+        <section class="admin-card filters-card">
+            <div class="filters-row">
+                <div class="field">
+                    <label for="searchInput">Buscar</label>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre..." />
+                </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
-  <script src="js/admin.js"></script>
+                <div class="field">
+                    <label for="statusFilter">Estado</label>
+                    <select id="statusFilter">
+                        <option value="all">Todos</option>
+                        <option value="confirmed">Confirmados</option>
+                        <option value="pending">Pendientes</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-card table-card">
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Invitado</th>
+                            <th>Cupos</th>
+                            <th>RSVP</th>
+                            <th>Cantidad</th>
+                            <th>Token</th>
+                            <th>Link</th>
+                            <th>Mensaje</th>
+                            <th>Fecha confirmación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody">
+                        <tr>
+                            <td colspan="9">Cargando invitados...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

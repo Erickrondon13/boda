@@ -1,31 +1,16 @@
--- =========================================================
--- 04_policies.sql
--- Políticas de seguridad (RLS) para Supabase
--- =========================================================
-
--- Habilitar RLS
 alter table public.invitados enable row level security;
-alter table public.rsvp_confirmaciones enable row level security;
 
--- Política: los invitados pueden leer su propio registro por token
-create policy "Invitados pueden leer su registro por token"
+drop policy if exists "invitados_select_all" on public.invitados;
+create policy "invitados_select_all"
 on public.invitados
 for select
+to anon, authenticated
 using (true);
 
--- Política: cualquiera puede insertar/actualizar RSVP (controlado por la función)
-create policy "Cualquiera puede insertar RSVP"
-on public.rsvp_confirmaciones
-for insert
-with check (true);
-
-create policy "Cualquiera puede actualizar RSVP"
-on public.rsvp_confirmaciones
+drop policy if exists "invitados_update_all" on public.invitados;
+create policy "invitados_update_all"
+on public.invitados
 for update
-using (true);
-
--- Política: solo service_role puede eliminar RSVP
-create policy "Solo service_role puede eliminar RSVP"
-on public.rsvp_confirmaciones
-for delete
-using (auth.role() = 'service_role');
+to anon, authenticated
+using (true)
+with check (true);

@@ -1,26 +1,43 @@
-const weddingDate = new Date(APP_CONFIG.weddingDate).getTime()
+(function initCountdown() {
+    const targetDate = new Date('2026-11-15T16:00:00-05:00').getTime();
 
-function pad(num) {
-  return String(num).padStart(2, '0')
-}
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
 
-function updateCountdown() {
-  const now = new Date().getTime()
-  const distance = weddingDate - now
+    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+        return;
+    }
 
-  if (distance <= 0) {
-    document.getElementById('days').textContent = '00'
-    document.getElementById('hours').textContent = '00'
-    document.getElementById('minutes').textContent = '00'
-    document.getElementById('seconds').textContent = '00'
-    return
-  }
+    function pad(value) {
+        return String(value).padStart(2, '0');
+    }
 
-  document.getElementById('days').textContent = pad(Math.floor(distance / (1000 * 60 * 60 * 24)))
-  document.getElementById('hours').textContent = pad(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))
-  document.getElementById('minutes').textContent = pad(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)))
-  document.getElementById('seconds').textContent = pad(Math.floor((distance % (1000 * 60)) / 1000))
-}
+    function updateCountdown() {
+        const now = Date.now();
+        const diff = targetDate - now;
 
-updateCountdown()
-setInterval(updateCountdown, 1000)
+        if (diff <= 0) {
+            daysEl.textContent = '00';
+            hoursEl.textContent = '00';
+            minutesEl.textContent = '00';
+            secondsEl.textContent = '00';
+            return;
+        }
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (60 * 60 * 24));
+        const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+        const seconds = totalSeconds % 60;
+
+        daysEl.textContent = pad(days);
+        hoursEl.textContent = pad(hours);
+        minutesEl.textContent = pad(minutes);
+        secondsEl.textContent = pad(seconds);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+})();

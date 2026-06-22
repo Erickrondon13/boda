@@ -1,237 +1,171 @@
-// =========================================================
-// REFERENCIAS DOM
-// =========================================================
-const guestNamesEl = document.getElementById('guestNames')
-const guestSpotsEl = document.getElementById('guestSpots')
-const guestRoleBadgeEl = document.getElementById('guestRoleBadge')
-const guestStatusBoxEl = document.getElementById('guestStatusBox')
+let currentGuest = null;
 
-const rsvpCardEl = document.getElementById('rsvpCard')
-const rsvpFormWrapperEl = document.getElementById('rsvpFormWrapper')
-const confirmSuccessBoxEl = document.getElementById('confirmSuccessBox')
-const confirmSuccessTextEl = document.getElementById('confirmSuccessText')
+document.addEventListener('DOMContentLoaded', () => {
+    initInvitation();
+});
 
-const rsvpFormEl = document.getElementById('rsvpForm')
-const btnConfirmarEl = document.getElementById('btnConfirmar')
-const formStatusEl = document.getElementById('formStatus')
+async function initInvitation() {
+    const guestLoading = document.getElementById('guestLoading');
+    const guestContent = document.getElementById('guestContent');
+    const errorBox = document.getElementById('errorBox');
 
-const cantidadSelectEl = document.getElementById('cantidad_confirmada')
-const cantidadHelperEl = document.getElementById('cantidadHelper')
-const groupCantidadEl = document.getElementById('groupCantidad')
+    try {
+        const token = getTokenFromUrl();
 
-const asisteSiEl = document.getElementById('asiste_si')
-const asisteNoEl = document.getElementById('asiste_no')
+        if (!token) {
+            throw new Error('No se encontró el token de invitación en la URL.');
+        }
 
-const telefonoEl = document.getElementById('telefono')
-const mensajeEl = document.getElementById('mensaje')
+        const guest = await fetchGuestByToken(token);
+        currentGuest = guest;
 
-// =========================================================
-// ESTADO
-// =========================================================
-let invitadoActual = null
-let tokenActual = null
+        renderGuestInfo(guest);
 
-// =========================================================
-// HELPERS UI
-// =========================================================
-function setStatus(element, type, message) {
-  element.className = 'status-box show'
+        guestLoading.classList.add('hidden');
+        guestContent.classList.remove('hidden');
 
-  if (type === 'success') {
-    element.classList.add('status-success')
-  } else if (type === 'error') {
-    element.classList.add('status-error')
-  } else {
-    element.classList.add('status-info')
-  }
-
-  element.textContent = message
-}
-
-function clearStatus(element) {
-  element.className = 'status-box'
-  element.textContent = ''
-}
-
-function disableRsvpForm(disabled) {
-  const controls = rsvpFormEl.querySelectorAll('input, select, textarea, button')
-  controls.forEach(ctrl => ctrl.disabled = disabled)
-}
-
-function escapeHtml(text) {
-  return String(text ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&#039;')
+        bindRsvpForm(guest);
+    } catch (error) {
+        console.error(error);
+        guestLoading.classList.add('hidden');
+        guestContent.classList.remove('hidden');
+        showError(error.message || 'No se pudo cargar la invitación.');
+    }
 }
 
 function getTokenFromUrl() {
-  const params = new URLSearchParams(window.location.search)
-  return params.get('token')
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
 }
 
-function fillCantidadOptions(maxCupos) {
-  cantidadSelectEl.innerHTML = ''
+async function fetchGuestByToken(token) {
+    const { data, error } = await supabaseClient
+        .from('invitados')
+        .select('*')
+        .eq('token', token)
+        .single();
 
-  for (let i = 1; i <= maxCupos; i++) {
-    const option = document.createElement('option')
-    option.value = String(i)
-    option.textContent = String(i)
-    cantidadSelectEl.appendChild(option)
-  }
-
-  cantidadHelperEl.textContent =
-    `Tienes ${maxCupos} lugar${maxCupos > 1 ? 'es' : ''} reservado${maxCupos > 1 ? 's' : ''}.`
-}
-
-function toggleCantidadByAsistencia() {
-  const asiste = asisteSiEl.checked
-  groupCantidadEl.classList.toggle('hidden', !asiste)
-}
-
-function renderInvitado(invitado) {
-  invitadoActual = invitado
-
-  guestNamesEl.textContent = `Hola, ${invitado.nombre_apellido}`
-  guestSpotsEl.textContent = invitado.cupos_reservados
-  guestRoleBadgeEl.textContent = invitado.rol || APP_CONFIG.defaultRoleLabel
-
-  fillCantidadOptions(invitado.cupos_reservados)
-  setStatus(guestStatusBoxEl, 'info', 'Tu invitación está lista. Ya puedes confirmar tu asistencia.')
-}
-
-function renderRsvpExistente(rsvp) {
-  if (!rsvp) return
-
-  if (rsvp.asiste === true) {
-    confirmSuccessTextEl.innerHTML = `
-      ¡Qué alegría! Ya contamos contigo para el gran día.
-      <strong>Erick Rondón y Telma Verónica</strong>.
-    `
-  } else {
-    confirmSuccessTextEl.innerHTML = `
-      Gracias por confirmarnos. Lamentaremos no contar contigo ese día,
-      pero agradecemos mucho que nos hayas avisado 💛
-    `
-  }
-
-  rsvpFormWrapperEl.classList.add('hidden')
-  confirmSuccessBoxEl.classList.remove('hidden')
-}
-
-function renderInvitacionInvalida(message) {
-  guestNamesEl.textContent = 'Invitación no disponible'
-  guestSpotsEl.textContent = '0'
-  guestRoleBadgeEl.textContent = 'Acceso no válido'
-
-  setStatus(guestStatusBoxEl, 'error', message || 'No encontramos una invitación válida para este enlace.')
-
-  rsvpFormWrapperEl.classList.add('hidden')
-}
-
-// =========================================================
-// ANIMACIONES
-// =========================================================
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('show')
+    if (error || !data) {
+        throw new Error('Invitación no válida o invitado no encontrado.');
     }
-  })
-}, { threshold: 0.12 })
 
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el))
-
-// =========================================================
-// FORM RSVP
-// =========================================================
-function buildRsvpPayload() {
-  const asiste = rsvpFormEl.querySelector('input[name="asiste"]:checked')?.value === 'true'
-  const cantidad = asiste ? Number(cantidadSelectEl.value || 1) : 0
-
-  return {
-    p_token: tokenActual,
-    p_asiste: asiste,
-    p_cantidad_confirmada: cantidad,
-    p_telefono: telefonoEl.value.trim() || null,
-    p_mensaje: mensajeEl.value.trim() || null,
-  }
+    return data;
 }
 
-async function onSubmitRsvp(event) {
-  event.preventDefault()
-  clearStatus(formStatusEl)
+function renderGuestInfo(guest) {
+    const guestNameEl = document.getElementById('guestName');
+    const guestSlotsEl = document.getElementById('guestSlots');
+    const alreadyConfirmedBox = document.getElementById('alreadyConfirmedBox');
+    const rsvpBox = document.getElementById('rsvpBox');
+    const confirmedCount = document.getElementById('confirmedCount');
+    const companionsGroup = document.getElementById('companionsGroup');
 
-  if (!tokenActual || !invitadoActual) {
-    setStatus(formStatusEl, 'error', 'No hay una invitación válida para confirmar.')
-    return
-  }
+    guestNameEl.textContent = guest.nombre_apellido;
+    guestSlotsEl.textContent = guest.cupos ?? 0;
 
-  const payload = buildRsvpPayload()
+    fillConfirmedCountOptions(confirmedCount, guest.cupos || 1);
 
-  try {
-    disableRsvpForm(true)
-    btnConfirmarEl.textContent = 'Guardando confirmación...'
-
-    await confirmarRsvpPorToken(payload)
-
-    if (payload.p_asiste) {
-      confirmSuccessTextEl.innerHTML = `
-        ¡Qué alegría! Ya contamos contigo para el gran día.
-        <strong>Erick Rondón y Telma Verónica</strong>.
-      `
+    if (guest.confirmado) {
+        alreadyConfirmedBox.classList.remove('hidden');
+        rsvpBox.classList.add('hidden');
     } else {
-      confirmSuccessTextEl.innerHTML = `
-        Gracias por confirmarnos. Lamentaremos no contar contigo ese día,
-        pero agradecemos mucho que nos hayas avisado 💛
-      `
+        alreadyConfirmedBox.classList.add('hidden');
+        rsvpBox.classList.remove('hidden');
     }
 
-    rsvpFormWrapperEl.classList.add('hidden')
-    confirmSuccessBoxEl.classList.remove('hidden')
-    setStatus(guestStatusBoxEl, 'success', 'Tu confirmación ya quedó registrada.')
+    const attendanceSelect = document.getElementById('attendanceSelect');
+    attendanceSelect.addEventListener('change', () => {
+        if (attendanceSelect.value === 'si') {
+            companionsGroup.classList.remove('hidden');
+        } else {
+            companionsGroup.classList.add('hidden');
+        }
+    });
 
-  } catch (error) {
-    console.error(error)
-    setStatus(formStatusEl, 'error', error?.message || 'No se pudo guardar la confirmación. Intenta de nuevo.')
-  } finally {
-    disableRsvpForm(false)
-    btnConfirmarEl.textContent = 'Confirmar asistencia'
-  }
+    companionsGroup.classList.add('hidden');
 }
 
-// =========================================================
-// INIT
-// =========================================================
-async function initPage() {
-  try {
-    tokenActual = getTokenFromUrl()
+function fillConfirmedCountOptions(selectEl, maxCount) {
+    selectEl.innerHTML = '';
 
-    if (!tokenActual) {
-      renderInvitacionInvalida('Este enlace no contiene token de invitación.')
-      return
+    for (let i = 1; i <= maxCount; i++) {
+        const option = document.createElement('option');
+        option.value = String(i);
+        option.textContent = String(i);
+        selectEl.appendChild(option);
     }
-
-    const invitado = await cargarInvitadoPorToken(tokenActual)
-    renderInvitado(invitado)
-
-    const rsvpExistente = await cargarRsvpPorInvitadoId(invitado.id)
-
-    if (rsvpExistente) {
-      renderRsvpExistente(rsvpExistente)
-    }
-  } catch (error) {
-    console.error(error)
-    renderInvitacionInvalida(error?.message || 'No se pudo cargar la invitación.')
-  }
 }
 
-// Eventos
-asisteSiEl.addEventListener('change', toggleCantidadByAsistencia)
-asisteNoEl.addEventListener('change', toggleCantidadByAsistencia)
-rsvpFormEl.addEventListener('submit', onSubmitRsvp)
+function bindRsvpForm(guest) {
+    const form = document.getElementById('rsvpForm');
+    if (!form) return;
 
-toggleCantidadByAsistencia()
-initPage()
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        hideError();
+
+        const attendanceValue = document.getElementById('attendanceSelect').value;
+        const confirmedCountValue = document.getElementById('confirmedCount').value;
+        const guestMessage = document.getElementById('guestMessage').value.trim();
+
+        if (!attendanceValue) {
+            showError('Por favor selecciona si asistirás o no.');
+            return;
+        }
+
+        let confirmado = false;
+        let cantidadConfirmada = 0;
+
+        if (attendanceValue === 'si') {
+            confirmado = true;
+            cantidadConfirmada = Number(confirmedCountValue || 1);
+
+            if (cantidadConfirmada < 1 || cantidadConfirmada > (guest.cupos || 1)) {
+                showError('La cantidad confirmada no es válida.');
+                return;
+            }
+        }
+
+        try {
+            const payload = {
+                confirmado,
+                cantidad_confirmada: cantidadConfirmada,
+                mensaje: guestMessage || null,
+                fecha_confirmacion: new Date().toISOString()
+            };
+
+            const { error } = await supabaseClient
+                .from('invitados')
+                .update(payload)
+                .eq('id', guest.id);
+
+            if (error) {
+                throw error;
+            }
+
+            showSuccess();
+            document.getElementById('rsvpBox').classList.add('hidden');
+        } catch (error) {
+            console.error(error);
+            showError('No se pudo guardar tu confirmación. Intenta nuevamente.');
+        }
+    });
+}
+
+function showSuccess() {
+    const successBox = document.getElementById('successBox');
+    successBox.classList.remove('hidden');
+}
+
+function showError(message) {
+    const errorBox = document.getElementById('errorBox');
+    errorBox.textContent = message;
+    errorBox.classList.remove('hidden');
+}
+
+function hideError() {
+    const errorBox = document.getElementById('errorBox');
+    errorBox.textContent = '';
+    errorBox.classList.add('hidden');
+}

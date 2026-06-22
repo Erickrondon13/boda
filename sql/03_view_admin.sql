@@ -1,29 +1,16 @@
--- =========================================================
--- 03_view_admin.sql
--- Vista para panel de administración
--- =========================================================
-
-create or replace view public.vw_invitados_rsvp as
+create or replace view public.v_invitados_admin as
 select
     i.id,
     i.nombre_apellido,
-    i.cupos_reservados,
-    i.rol,
+    i.cupos,
+    i.confirmado,
+    i.cantidad_confirmada,
     i.token,
-    i.activo,
-    case
-        when r.id is null then 'pendiente'
-        when r.asiste = true then 'confirmado'
-        when r.asiste = false then 'rechazado'
-    end as estado_rsvp,
-    r.asiste,
-    r.cantidad_confirmada,
-    r.telefono,
-    r.mensaje,
-    r.confirmado_en,
+    i.telefono,
+    i.mensaje,
+    i.fecha_confirmacion,
     i.created_at,
-    i.updated_at
+    i.updated_at,
+    'https://Erickrondon13.github.io/boda/?id=' || i.token::text as link_invitacion
 from public.invitados i
-left join public.rsvp_confirmaciones r on r.invitado_id = i.id;
-
-comment on view public.vw_invitados_rsvp is 'Vista resumen de invitados y su estado RSVP';
+order by i.nombre_apellido;

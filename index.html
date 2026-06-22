@@ -1,341 +1,217 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Erick & Telma | Invitación de Boda</title>
-  <meta name="description" content="Invitación de boda de Erick & Telma" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Erick & Telma | Nuestra Boda</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+    <main class="wedding-page">
 
-  <!-- HERO -->
-  <header class="hero">
-    <div class="container hero-content">
-      <div class="hero-card">
-        <span class="eyebrow">Invitación de boda</span>
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <img src="assets/banner.jpg" alt="Erick y Telma" class="hero-image" />
+            <div class="hero-content">
+                <p class="hero-kicker">Nos casamos</p>
+                <h1>Erick <span>&</span> Telma</h1>
+                <p class="hero-date-main">15 de noviembre de 2026</p>
+            </div>
+        </section>
 
-        <h1>
-          Erick <span class="ampersand">&amp;</span> Telma
-        </h1>
-
-        <p>
-          Con el amor que nos une, la bendición de Dios y el apoyo de nuestros padres,
-          te invitamos a celebrar el día más especial de nuestras vidas.
-        </p>
-
-        <div class="hero-date">15 de noviembre 2026</div>
-
-        <div class="hero-actions">
-          <a href="#ubicacion" class="btn btn-primary">Ver detalles</a>
-          <a href="#invitados" class="btn btn-secondary">Confirmar asistencia</a>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- INTRO -->
-  <section class="container">
-    <div class="glass-card intro-card">
-      <p>
-        Nos llena de alegría compartir contigo este momento tan especial. Queremos celebrar
-        nuestro amor, nuestra fe y el comienzo de esta nueva etapa rodeados de las personas
-        que amamos.
-      </p>
-      <div class="date-pill">15 de noviembre 2026</div>
-    </div>
-  </section>
-
-  <!-- COUNTDOWN -->
-  <section class="section">
-    <div class="container">
-      <div class="section-title">Cuenta regresiva</div>
-      <h2 class="section-heading">Faltan solo unos instantes para nuestro gran día</h2>
-      <p class="section-subtitle">
-        Cada segundo nos acerca al &ldquo;sí, acepto&rdquo;.
-      </p>
-
-      <div class="countdown-wrap">
-        <div class="countdown" id="countdown">
-          <div class="time-card">
-            <span class="num" id="days">00</span>
-            <span class="label">Días</span>
-          </div>
-          <div class="time-card">
-            <span class="num" id="hours">00</span>
-            <span class="label">Horas</span>
-          </div>
-          <div class="time-card">
-            <span class="num" id="minutes">00</span>
-            <span class="label">Minutos</span>
-          </div>
-          <div class="time-card">
-            <span class="num" id="seconds">00</span>
-            <span class="label">Segundos</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- UBICACION -->
-  <section class="section" id="ubicacion">
-    <div class="container">
-      <div class="section-title">Lugar</div>
-      <h2 class="section-heading">Salsipuedes</h2>
-      <p class="section-subtitle">
-        El lugar donde celebraremos el comienzo de nuestra historia como esposos.
-      </p>
-
-      <div class="location-card glass-card">
-        <div class="location-copy">
-          <span class="location-badge">📍 Medellín, Antioquia</span>
-          <h3>Salsipuedes</h3>
-          <p>
-            Hemos preparado este día con muchísimo amor y nos encantará compartirlo contigo
-            en un ambiente elegante, cálido y lleno de momentos inolvidables.
-          </p>
-          <a
-            class="btn btn-primary"
-            href="https://maps.google.com/?q=Salsipuedes+Medellin"
-            target="_blank"
-            rel="noopener noreferrer"
-            style="width: fit-content;"
-          >
-            Ver ubicación
-          </a>
-        </div>
-        <div class="location-side" aria-label="Foto decorativa de la boda"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ITINERARIO -->
-  <section class="section" id="itinerario">
-    <div class="container">
-      <div class="section-title">Itinerario</div>
-      <h2 class="section-heading">Así celebraremos nuestro gran día</h2>
-      <p class="section-subtitle">
-        Una noche para recordar, brindar, sonreír y celebrar juntos.
-      </p>
-
-      <div class="timeline">
-        <article class="timeline-item">
-          <span class="timeline-time">4:00 PM</span>
-          <span class="timeline-icon">💍</span>
-          <h3 class="timeline-title">Ceremonia</h3>
-          <p class="timeline-desc">
-            El momento en el que uniremos nuestras vidas delante de Dios y de las personas que amamos.
-          </p>
-        </article>
-
-        <article class="timeline-item">
-          <span class="timeline-time">5:30 PM</span>
-          <span class="timeline-icon">📸</span>
-          <h3 class="timeline-title">Sesión de Fotos</h3>
-          <p class="timeline-desc">
-            Sonrisas, abrazos, familia y recuerdos que quedarán para siempre en nuestra historia.
-          </p>
-        </article>
-
-        <article class="timeline-item">
-          <span class="timeline-time">6:30 PM</span>
-          <span class="timeline-icon">🥂</span>
-          <h3 class="timeline-title">Cena y Brindis</h3>
-          <p class="timeline-desc">
-            Compartiremos la mesa, celebraremos el amor y levantaremos las copas por este nuevo comienzo.
-          </p>
-        </article>
-
-        <article class="timeline-item">
-          <span class="timeline-time">9:30 PM</span>
-          <span class="timeline-icon">✨</span>
-          <h3 class="timeline-title">Cierre de la Velada</h3>
-          <p class="timeline-desc">
-            El broche final de una noche inolvidable, llena de gratitud, alegría y muchísimo amor.
-          </p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- DRESS CODE -->
-  <section class="section" id="dresscode">
-    <div class="container">
-      <div class="section-title">Código de vestimenta</div>
-      <h2 class="section-heading">Elegancia para una noche especial</h2>
-      <p class="section-subtitle">
-        Queremos que te sientas cómodo, pero también espectacular.
-      </p>
-
-      <div class="dress-grid">
-        <div class="info-card center">
-          <span class="big-icon">🤵</span>
-          <h3 class="card-title">Formal</h3>
-          <div class="dress-label">Caballeros</div>
-          <p class="dress-note">
-            Traje formal o vestimenta elegante acorde con la ocasión.
-          </p>
-        </div>
-
-        <div class="info-card center">
-          <span class="big-icon">👗</span>
-          <h3 class="card-title">Largo</h3>
-          <div class="dress-label">Damas</div>
-          <p class="dress-note">
-            Vestido largo o atuendo elegante para una celebración inolvidable.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- REGALOS -->
-  <section class="section" id="regalos">
-    <div class="container">
-      <div class="section-title">Regalos</div>
-      <h2 class="section-heading">Su presencia es nuestro mejor regalo</h2>
-      <p class="section-subtitle">
-        Pero si desean tener un detalle con nosotros, estaremos profundamente agradecidos.
-      </p>
-
-      <div class="gifts-grid">
-        <div class="info-card center">
-          <span class="big-icon">🎁</span>
-          <h3 class="card-title">Lluvia de Sobres</h3>
-          <p class="muted">
-            Su presencia es nuestro mejor regalo. Pero si desean tener un detalle con nosotros:
-          </p>
-          <div class="gift-highlight">
-            ✉️ Buzón en recepción
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- INVITADOS / RSVP -->
-  <section class="section" id="invitados">
-    <div class="container">
-      <div class="section-title">Invitados</div>
-      <h2 class="section-heading">Nos encantará celebrar contigo</h2>
-      <p class="section-subtitle">
-        Hemos reservado un lugar especial para ustedes en esta noche inolvidable.
-      </p>
-
-      <div class="guests-grid">
-        <!-- TARJETA INVITADO -->
-        <div class="info-card guest-box">
-          <span class="big-icon">💌</span>
-          <div class="guest-names" id="guestNames">
-            Hola, invitado especial
-          </div>
-          <p class="muted">
-            Hemos reservado <strong id="guestSpots">0</strong> lugares para ustedes.
-          </p>
-          <div class="guest-badge" id="guestRoleBadge">
-            Invitación especial
-          </div>
-          <div id="guestStatusBox" class="status-box status-info show">
-            Cargando tu invitación...
-          </div>
-        </div>
-
-        <!-- FORM RSVP -->
-        <div class="info-card" id="rsvpCard">
-          <div class="confirm-box hidden" id="confirmSuccessBox">
-            <div class="success">💌</div>
-            <h3 class="confirm-title">¡Confirmación Recibida!</h3>
-            <p class="muted" id="confirmSuccessText">
-              ¡Qué alegría! Ya contamos contigo para el gran día.
-              <strong>Erick Rondón y Telma Verónica</strong>.
+        <!-- INTRO -->
+        <section class="card intro-card">
+            <div class="section-icon">✦</div>
+            <p class="intro-text">
+                Con el amor que nos une, la bendición de Dios y el apoyo de nuestros padres,
+                te invitamos a celebrar el día más especial de nuestras vidas.
             </p>
-          </div>
+        </section>
 
-          <div id="rsvpFormWrapper">
-            <h3 class="card-title" style="text-align:center;">Confirmar asistencia</h3>
-            <p class="muted" style="text-align:center; margin-top:6px;">
-              Nos ayudaría muchísimo que confirmes tu asistencia.
-            </p>
-
-            <form id="rsvpForm" class="rsvp-form">
-              <div class="form-group">
-                <label class="form-label">¿Nos acompañarás?</label>
-                <div class="radio-group">
-                  <div class="radio-option">
-                    <input type="radio" name="asiste" id="asiste_si" value="true" checked />
-                    <label for="asiste_si">💍 Sí, asistiré</label>
-                  </div>
-                  <div class="radio-option">
-                    <input type="radio" name="asiste" id="asiste_no" value="false" />
-                    <label for="asiste_no">💔 No podré asistir</label>
-                  </div>
+        <!-- COUNTDOWN -->
+        <section class="card countdown-card">
+            <h2>Cuenta regresiva</h2>
+            <div id="countdown" class="countdown">
+                <div class="count-box">
+                    <span id="days">00</span>
+                    <small>Días</small>
                 </div>
-              </div>
+                <div class="count-box">
+                    <span id="hours">00</span>
+                    <small>Horas</small>
+                </div>
+                <div class="count-box">
+                    <span id="minutes">00</span>
+                    <small>Minutos</small>
+                </div>
+                <div class="count-box">
+                    <span id="seconds">00</span>
+                    <small>Segundos</small>
+                </div>
+            </div>
+        </section>
 
-              <div class="form-group" id="groupCantidad">
-                <label class="form-label" for="cantidad_confirmada">¿Cuántos asistirán?</label>
-                <select id="cantidad_confirmada" name="cantidad_confirmada" class="form-control"></select>
-                <div class="helper-text" id="cantidadHelper"></div>
-              </div>
+        <!-- LUGAR -->
+        <section class="card location-card">
+            <h2>Lugar</h2>
+            <p class="place-name">Salsipuedes</p>
+            <a
+                class="btn btn-primary"
+                href="https://www.google.com/maps/search/?api=1&query=Salsipuedes"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                Ver ubicación
+            </a>
+        </section>
 
-              <div class="form-group">
-                <label class="form-label" for="telefono">Teléfono</label>
-                <input
-                  id="telefono"
-                  name="telefono"
-                  type="text"
-                  class="form-control"
-                  placeholder="3001234567"
-                  maxlength="30"
-                />
-              </div>
+        <!-- ITINERARIO -->
+        <section class="card itinerary-card">
+            <h2>Itinerario</h2>
 
-              <div class="form-group">
-                <label class="form-label" for="mensaje">Mensaje para los novios</label>
-                <textarea
-                  id="mensaje"
-                  name="mensaje"
-                  class="form-control"
-                  placeholder="Déjanos un mensaje bonito 💛"
-                  maxlength="500"
-                ></textarea>
-              </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">4:00 PM</div>
+                    <div class="timeline-icon">💍</div>
+                    <div class="timeline-content">
+                        <h3>Ceremonia</h3>
+                    </div>
+                </div>
 
-              <div id="formStatus" class="status-box"></div>
+                <div class="timeline-item">
+                    <div class="timeline-time">5:30 PM</div>
+                    <div class="timeline-icon">📸</div>
+                    <div class="timeline-content">
+                        <h3>Sesión de Fotos</h3>
+                    </div>
+                </div>
 
-              <button type="submit" class="btn btn-primary" id="btnConfirmar">
-                Confirmar asistencia
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+                <div class="timeline-item">
+                    <div class="timeline-time">6:30 PM</div>
+                    <div class="timeline-icon">🥂</div>
+                    <div class="timeline-content">
+                        <h3>Cena y Brindis</h3>
+                    </div>
+                </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
-      <h3>Erick &amp; Telma</h3>
-      <p>
-        Gracias por ser parte de nuestra historia y acompañarnos en este día tan especial.
-        Será una alegría inmensa compartir contigo este momento que quedará para siempre en nuestro corazón.
-      </p>
-      <div class="divider"></div>
-    </div>
-  </footer>
+                <div class="timeline-item">
+                    <div class="timeline-time">9:30 PM</div>
+                    <div class="timeline-icon">✨</div>
+                    <div class="timeline-content">
+                        <h3>Cierre de la Velada</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
-  <script src="js/countdown.js"></script>
-  <script src="js/app.js"></script>
+        <!-- DRESS CODE -->
+        <section class="card dress-card">
+            <h2>Código de Vestimenta</h2>
+            <div class="dress-grid">
+                <div class="dress-box">
+                    <div class="dress-icon">🤵</div>
+                    <div class="dress-text">Formal</div>
+                </div>
+                <div class="dress-box">
+                    <div class="dress-icon">👗</div>
+                    <div class="dress-text">Largo</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REGALOS -->
+        <section class="card gifts-card">
+            <h2>🎁 Regalos</h2>
+            <p>
+                Su presencia es nuestro mejor regalo. Pero si desean tener un detalle con nosotros:
+            </p>
+            <div class="gift-highlight">
+                <strong>Lluvia de Sobres</strong>
+                <span>Buzón en recepción ✉️</span>
+            </div>
+        </section>
+
+        <!-- INVITADO -->
+        <section class="card guest-card" id="guestCard">
+            <h2>Tu invitación</h2>
+
+            <div id="guestLoading" class="guest-loading">
+                Cargando invitación...
+            </div>
+
+            <div id="guestContent" class="guest-content hidden">
+                <p class="guest-greeting">
+                    Hola, <strong id="guestName">Invitado</strong>
+                </p>
+
+                <p class="guest-slots">
+                    Hemos reservado <strong id="guestSlots">0</strong> lugares para ustedes.
+                </p>
+
+                <div id="alreadyConfirmedBox" class="already-confirmed hidden">
+                    <h3>💌 ¡Confirmación Recibida!</h3>
+                    <p>
+                        ¡Qué alegría! Ya contamos contigo para el gran día.
+                    </p>
+                    <p class="signature">Erick Rondón & Telma Verónica</p>
+                </div>
+
+                <div id="rsvpBox" class="rsvp-box hidden">
+                    <h3>RSVP</h3>
+                    <p class="rsvp-help">
+                        Por favor confirma tu asistencia.
+                    </p>
+
+                    <form id="rsvpForm">
+                        <div class="form-group">
+                            <label for="attendanceSelect">¿Asistirás?</label>
+                            <select id="attendanceSelect" required>
+                                <option value="">Selecciona una opción</option>
+                                <option value="si">Sí, asistiré</option>
+                                <option value="no">No podré asistir</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="companionsGroup">
+                            <label for="confirmedCount">¿Cuántos asistirán?</label>
+                            <select id="confirmedCount"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="guestMessage">Mensaje para los novios (opcional)</label>
+                            <textarea
+                                id="guestMessage"
+                                rows="4"
+                                placeholder="Escribe un mensaje bonito... o por lo menos no uno que nos haga llorar antes de la boda."
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Confirmar asistencia
+                        </button>
+                    </form>
+                </div>
+
+                <div id="successBox" class="success-box hidden">
+                    <h3>💌 ¡Confirmación Recibida!</h3>
+                    <p>
+                        ¡Qué alegría! Ya contamos contigo para el gran día.
+                    </p>
+                    <p class="signature">Erick Rondón & Telma Verónica</p>
+                </div>
+
+                <div id="errorBox" class="error-box hidden"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

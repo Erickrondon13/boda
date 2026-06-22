@@ -1,134 +1,217 @@
-// =========================================================
-// ADMIN - Lógica del panel de administración
-// =========================================================
+let allGuests = [];
 
-const adminTableBody = document.getElementById('adminTableBody')
-const adminLoading = document.getElementById('adminLoading')
-const adminError = document.getElementById('adminError')
-const totalCount = document.getElementById('totalCount')
-const confirmedCount = document.getElementById('confirmedCount')
-const pendingCount = document.getElementById('pendingCount')
-const declinedCount = document.getElementById('declinedCount')
+document.addEventListener('DOMContentLoaded', () => {
+    bindAdminEvents();
+    loadGuests();
+});
 
-let invitadosData = []
-let filtroActual = 'all'
+function bindAdminEvents() {
+    const btnRefresh = document.getElementById('btnRefresh');
+    const btnCopyAllLinks = document.getElementById('btnCopyAllLinks');
+    const btnExportCsv = document.getElementById('btnExportCsv');
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
 
-// =========================================================
-// CARGAR DATOS
-// =========================================================
-async function cargarInvitados() {
-  try {
-    const client = initSupabase()
-    const { data, error } = await client
-      .from('vw_invitados_rsvp')
-      .select('*')
-      .order('nombre_apellido')
-
-    if (error) throw error
-    return data || []
-  } catch (err) {
-    throw err
-  }
+    btnRefresh?.addEventListener('click', loadGuests);
+    btnCopyAllLinks?.addEventListener('click', copyAllLinks);
+    btnExportCsv?.addEventListener('click', exportGuestsCsv);
+    searchInput?.addEventListener('input', applyFilters);
+    statusFilter?.addEventListener('change', applyFilters);
 }
 
-// =========================================================
-// RENDER
-// =========================================================
-function renderAdmin(data) {
-  const filtrados = filtroActual === 'all'
-    ? data
-    : data.filter(inv => inv.estado_rsvp === filtroActual)
+async function loadGuests() {
+    const tbody = document.getElementById('adminTableBody');
+    tbody.innerHTML = `<tr><td colspan="9" class="empty-row">Cargando invitados...</td></tr>`;
 
-  // Resumen
-  const total = data.length
-  const confirmados = data.filter(inv => inv.estado_rsvp === 'confirmado').length
-  const pendientes = data.filter(inv => inv.estado_rsvp === 'pendiente').length
-  const rechazados = data.filter(inv => inv.estado_rsvp === 'rechazado').length
+    const { data, error } = await supabaseClient
+        .from('v_invitados_admin')
+        .select('*')
+        .order('nombre_apellido', { ascending: true });
 
-  totalCount.textContent = total
-  confirmedCount.textContent = confirmados
-  pendingCount.textContent = pendientes
-  declinedCount.textContent = rechazados
+    if (error) {
+        console.error(error);
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-row">Error cargando invitados</td></tr>`;
+        return;
+    }
 
-  // Tabla
-  if (filtrados.length === 0) {
-    adminTableBody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text-soft);">
-      No hay invitados con este filtro.
-    </td></tr>`
-    return
-  }
-
-  const baseUrl = `${window.location.origin}${window.location.pathname.replace(/admin\.html$/, '')}index.html`
-
-  adminTableBody.innerHTML = filtrados.map(inv => {
-    const badgeClass = inv.estado_rsvp === 'confirmado' ? 'badge-confirmado'
-      : inv.estado_rsvp === 'rechazado' ? 'badge-rechazado'
-      : 'badge-pendiente'
-
-    const badgeText = inv.estado_rsvp === 'confirmado' ? 'Confirmado'
-      : inv.estado_rsvp === 'rechazado' ? 'Rechazado'
-      : 'Pendiente'
-
-    const link = `${baseUrl}?token=${inv.token}`
-
-    return `<tr>
-      <td><strong>${escapeHtml(inv.nombre_apellido)}</strong></td>
-      <td>${inv.cupos_reservados}</td>
-      <td>${escapeHtml(inv.rol || '-')}</td>
-      <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-      <td>${inv.cantidad_confirmada ?? '-'}</td>
-      <td>${escapeHtml(inv.telefono || '-')}</td>
-      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeHtml(inv.mensaje || '')}">
-        ${escapeHtml(inv.mensaje || '-')}
-      </td>
-      <td class="token-cell" title="${escapeHtml(link)}">
-        <a href="${link}" target="_blank" style="color:var(--gold);">${inv.token}</a>
-      </td>
-    </tr>`
-  }).join('')
+    allGuests = data || [];
+    renderStats(allGuests);
+    renderTable(allGuests);
 }
 
-// =========================================================
-// FILTROS
-// =========================================================
-function aplicarFiltro(filtro) {
-  filtroActual = filtro
+function applyFilters() {
+    const search = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+    const status = document.getElementById('statusFilter')?.value || 'all';
 
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    const isActive = btn.dataset.filter === filtro
-    btn.classList.toggle('active', isActive)
-    btn.classList.toggle('btn-primary', isActive)
-    btn.classList.toggle('btn-secondary', !isActive)
-  })
+    const filtered = allGuests.filter(guest => {
+        const matchName = guest.nombre_apellido.toLowerCase().includes(search);
 
-  renderAdmin(invitadosData)
+        let matchStatus = true;
+        if (status === 'confirmed') {
+            matchStatus = guest.confirmado === true;
+        } else if (status === 'pending') {
+            matchStatus = guest.confirmado === false;
+        }
+
+        return matchName && matchStatus;
+    });
+
+    renderStats(filtered);
+    renderTable(filtered);
 }
 
-// =========================================================
-// INIT
-// =========================================================
-async function initAdmin() {
-  try {
-    initSupabase()
+function renderStats(guests) {
+    const total = guests.length;
+    const confirmed = guests.filter(g => g.confirmado).length;
+    const pending = total - confirmed;
+    const confirmedPeople = guests.reduce((acc, guest) => {
+        return acc + Number(guest.cantidad_confirmada || 0);
+    }, 0);
 
-    invitadosData = await cargarInvitados()
-
-    adminLoading.classList.remove('show')
-    adminLoading.classList.add('hidden')
-
-    renderAdmin(invitadosData)
-  } catch (err) {
-    console.error(err)
-    adminLoading.classList.remove('show')
-    adminLoading.classList.add('hidden')
-    adminError.classList.add('show')
-    adminError.textContent = 'Error al cargar los datos: ' + (err.message || 'Error de conexión')
-  }
+    document.getElementById('statTotal').textContent = total;
+    document.getElementById('statConfirmed').textContent = confirmed;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statConfirmedPeople').textContent = confirmedPeople;
 }
 
-// Eventos filtros
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => aplicarFiltro(btn.dataset.filter))
-})
+function renderTable(guests) {
+    const tbody = document.getElementById('adminTableBody');
 
-initAdmin()
+    if (!guests.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-row">No hay invitados para mostrar</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = guests.map(guest => {
+        const statusBadge = guest.confirmado
+            ? `<span class="badge badge-confirmed">Sí</span>`
+            : `<span class="badge badge-pending">No</span>`;
+
+        return `
+            <tr>
+                <td>${escapeHtml(guest.nombre_apellido)}</td>
+                <td>${guest.cupos ?? ''}</td>
+                <td>${statusBadge}</td>
+                <td>${guest.cantidad_confirmada ?? ''}</td>
+                <td class="token-cell">${guest.token}</td>
+                <td class="link-cell">
+                    <a href="${guest.link_invitacion}" target="_blank">${guest.link_invitacion}</a>
+                </td>
+                <td class="message-cell">${escapeHtml(guest.mensaje || '')}</td>
+                <td>${formatDate(guest.fecha_confirmacion)}</td>
+                <td>
+                    <div class="row-actions">
+                        <button class="action-btn" onclick="copyText('${guest.token}')">Copiar token</button>
+                        <button class="action-btn primary" onclick="copyText('${escapeForJs(guest.link_invitacion)}')">Copiar link</button>
+                        <button class="action-btn" onclick="window.open('${guest.link_invitacion}', '_blank')">Abrir</button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+async function copyText(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        alert('Copiado al portapapeles');
+    } catch (error) {
+        console.error(error);
+        alert('No se pudo copiar');
+    }
+}
+
+async function copyAllLinks() {
+    if (!allGuests.length) {
+        alert('No hay invitados cargados');
+        return;
+    }
+
+    const lines = allGuests.map(guest => `${guest.nombre_apellido}: ${guest.link_invitacion}`);
+    const text = lines.join('\n');
+
+    try {
+        await navigator.clipboard.writeText(text);
+        alert('Todos los links fueron copiados');
+    } catch (error) {
+        console.error(error);
+        alert('No se pudo copiar la lista de links');
+    }
+}
+
+function exportGuestsCsv() {
+    if (!allGuests.length) {
+        alert('No hay invitados para exportar');
+        return;
+    }
+
+    const headers = [
+        'nombre_apellido',
+        'cupos',
+        'confirmado',
+        'cantidad_confirmada',
+        'token',
+        'link_invitacion',
+        'mensaje',
+        'fecha_confirmacion'
+    ];
+
+    const rows = allGuests.map(guest => [
+        csvValue(guest.nombre_apellido),
+        csvValue(guest.cupos),
+        csvValue(guest.confirmado ? 'Sí' : 'No'),
+        csvValue(guest.cantidad_confirmada ?? ''),
+        csvValue(guest.token),
+        csvValue(guest.link_invitacion),
+        csvValue(guest.mensaje || ''),
+        csvValue(formatDate(guest.fecha_confirmacion))
+    ]);
+
+    const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'invitados_boda.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+}
+
+function csvValue(value) {
+    const stringValue = String(value ?? '');
+    return `"${stringValue.replace(/"/g, '""')}"`;
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return '';
+
+    return date.toLocaleString('es-CO', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function escapeHtml(text) {
+    return String(text || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+function escapeForJs(text) {
+    return String(text || '')
+        .replaceAll('\\', '\\\\')
+        .replaceAll("'", "\\'");
+}
