@@ -24,7 +24,7 @@ async function loadGuests() {
     tbody.innerHTML = `<tr><td colspan="9" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
-        .from('v_invitados_admin')
+        .from('vw_invitados_rsvp')
         .select('*')
         .order('nombre_apellido', { ascending: true });
 
@@ -48,9 +48,9 @@ function applyFilters() {
 
         let matchStatus = true;
         if (status === 'confirmed') {
-            matchStatus = guest.confirmado === true;
+            matchStatus = guest.estado_rsvp === 'confirmado';
         } else if (status === 'pending') {
-            matchStatus = guest.confirmado === false;
+            matchStatus = guest.estado_rsvp === 'pendiente' || guest.estado_rsvp === null;
         }
 
         return matchName && matchStatus;
@@ -62,8 +62,8 @@ function applyFilters() {
 
 function renderStats(guests) {
     const total = guests.length;
-    const confirmed = guests.filter(g => g.confirmado).length;
-    const pending = total - confirmed;
+    const confirmed = guests.filter(g => g.estado_rsvp === 'confirmado').length;
+    const pending = guests.filter(g => g.estado_rsvp === 'pendiente' || !g.estado_rsvp).length;
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
@@ -83,27 +83,31 @@ function renderTable(guests) {
     }
 
     tbody.innerHTML = guests.map(guest => {
-        const statusBadge = guest.confirmado
+        const statusBadge = guest.estado_rsvp === 'confirmado'
             ? `<span class="badge badge-confirmed">Sí</span>`
-            : `<span class="badge badge-pending">No</span>`;
+            : guest.estado_rsvp === 'rechazado'
+            ? `<span class="badge badge-rejected">No</span>`
+            : `<span class="badge badge-pending">Pendiente</span>`;
+
+        const link = PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token;
 
         return `
             <tr>
                 <td>${escapeHtml(guest.nombre_apellido)}</td>
-                <td>${guest.cupos ?? ''}</td>
+                <td>${guest.cupos_reservados ?? ''}</td>
                 <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
                 <td class="token-cell">${guest.token}</td>
                 <td class="link-cell">
-                    <a href="${guest.link_invitacion}" target="_blank">${guest.link_invitacion}</a>
+                    <a href="${link}" target="_blank">${link}</a>
                 </td>
                 <td class="message-cell">${escapeHtml(guest.mensaje || '')}</td>
-                <td>${formatDate(guest.fecha_confirmacion)}</td>
+                <td>${formatDate(guest.confirmado_en)}</td>
                 <td>
                     <div class="row-actions">
                         <button class="action-btn" onclick="copyText('${guest.token}')">Copiar token</button>
-                        <button class="action-btn primary" onclick="copyText('${escapeForJs(guest.link_invitacion)}')">Copiar link</button>
-                        <button class="action-btn" onclick="window.open('${guest.link_invitacion}', '_blank')">Abrir</button>
+                        <button class="action-btn primary" onclick="copyText('${escapeForJs(link)}')">Copiar link</button>
+                        <button class="action-btn" onclick="window.open('${escapeForJs(link)}', '_blank')">Abrir</button>
                     </div>
                 </td>
             </tr>
@@ -127,7 +131,10 @@ async function copyAllLinks() {
         return;
     }
 
-    const lines = allGuests.map(guest => `${guest.nombre_apellido}: ${guest.link_invitacion}`);
+    const lines = allGuests.map(guest => {
+        const link = PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token;
+        return `${guest.nombre_apellido}: ${link}`;
+    });
     const text = lines.join('\n');
 
     try {
@@ -147,25 +154,28 @@ function exportGuestsCsv() {
 
     const headers = [
         'nombre_apellido',
-        'cupos',
-        'confirmado',
+        'cupos_reservados',
+        'estado_rsvp',
         'cantidad_confirmada',
         'token',
         'link_invitacion',
         'mensaje',
-        'fecha_confirmacion'
+        'confirmado_en'
     ];
 
-    const rows = allGuests.map(guest => [
-        csvValue(guest.nombre_apellido),
-        csvValue(guest.cupos),
-        csvValue(guest.confirmado ? 'Sí' : 'No'),
-        csvValue(guest.cantidad_confirmada ?? ''),
-        csvValue(guest.token),
-        csvValue(guest.link_invitacion),
-        csvValue(guest.mensaje || ''),
-        csvValue(formatDate(guest.fecha_confirmacion))
-    ]);
+    const rows = allGuests.map(guest => {
+        const link = PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token;
+        return [
+            csvValue(guest.nombre_apellido),
+            csvValue(guest.cupos_reservados),
+            csvValue(guest.estado_rsvp || 'pendiente'),
+            csvValue(guest.cantidad_confirmada ?? ''),
+            csvValue(guest.token),
+            csvValue(link),
+            csvValue(guest.mensaje || ''),
+            csvValue(formatDate(guest.confirmado_en))
+        ];
+    });
 
     const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

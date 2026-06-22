@@ -179,6 +179,11 @@ body {
     color: #24724a;
 }
 
+.badge-rejected {
+    background: #f8e9e9;
+    color: #8f2f2f;
+}
+
 .badge-pending {
     background: #fff5e8;
     color: #8b5a17;

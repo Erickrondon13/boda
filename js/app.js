@@ -1,4 +1,5 @@
 let currentGuest = null;
+let currentToken = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initInvitation();
@@ -10,13 +11,13 @@ async function initInvitation() {
     const errorBox = document.getElementById('errorBox');
 
     try {
-        const token = getTokenFromUrl();
+        currentToken = getTokenFromUrl();
 
-        if (!token) {
+        if (!currentToken) {
             throw new Error('No se encontró el token de invitación en la URL.');
         }
 
-        const guest = await fetchGuestByToken(token);
+        const guest = await fetchGuestByToken(currentToken);
         currentGuest = guest;
 
         renderGuestInfo(guest);
@@ -35,21 +36,7 @@ async function initInvitation() {
 
 function getTokenFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('id');
-}
-
-async function fetchGuestByToken(token) {
-    const { data, error } = await supabaseClient
-        .from('invitados')
-        .select('*')
-        .eq('token', token)
-        .single();
-
-    if (error || !data) {
-        throw new Error('Invitación no válida o invitado no encontrado.');
-    }
-
-    return data;
+    return params.get('token');
 }
 
 function renderGuestInfo(guest) {
@@ -59,21 +46,13 @@ function renderGuestInfo(guest) {
     const rsvpBox = document.getElementById('rsvpBox');
     const confirmedCount = document.getElementById('confirmedCount');
     const companionsGroup = document.getElementById('companionsGroup');
+    const attendanceSelect = document.getElementById('attendanceSelect');
 
     guestNameEl.textContent = guest.nombre_apellido;
-    guestSlotsEl.textContent = guest.cupos ?? 0;
+    guestSlotsEl.textContent = guest.cupos_reservados;
 
-    fillConfirmedCountOptions(confirmedCount, guest.cupos || 1);
+    fillConfirmedCountOptions(confirmedCount, guest.cupos_reservados);
 
-    if (guest.confirmado) {
-        alreadyConfirmedBox.classList.remove('hidden');
-        rsvpBox.classList.add('hidden');
-    } else {
-        alreadyConfirmedBox.classList.add('hidden');
-        rsvpBox.classList.remove('hidden');
-    }
-
-    const attendanceSelect = document.getElementById('attendanceSelect');
     attendanceSelect.addEventListener('change', () => {
         if (attendanceSelect.value === 'si') {
             companionsGroup.classList.remove('hidden');
@@ -83,6 +62,27 @@ function renderGuestInfo(guest) {
     });
 
     companionsGroup.classList.add('hidden');
+
+    checkExistingConfirmation(guest.id);
+}
+
+async function checkExistingConfirmation(invitadoId) {
+    const alreadyConfirmedBox = document.getElementById('alreadyConfirmedBox');
+    const rsvpBox = document.getElementById('rsvpBox');
+
+    try {
+        const existing = await fetchExistingRsvp(invitadoId);
+        if (existing) {
+            alreadyConfirmedBox.classList.remove('hidden');
+            rsvpBox.classList.add('hidden');
+        } else {
+            alreadyConfirmedBox.classList.add('hidden');
+            rsvpBox.classList.remove('hidden');
+        }
+    } catch {
+        alreadyConfirmedBox.classList.add('hidden');
+        rsvpBox.classList.remove('hidden');
+    }
 }
 
 function fillConfirmedCountOptions(selectEl, maxCount) {
@@ -114,35 +114,21 @@ function bindRsvpForm(guest) {
             return;
         }
 
-        let confirmado = false;
+        let asiste = false;
         let cantidadConfirmada = 0;
 
         if (attendanceValue === 'si') {
-            confirmado = true;
+            asiste = true;
             cantidadConfirmada = Number(confirmedCountValue || 1);
 
-            if (cantidadConfirmada < 1 || cantidadConfirmada > (guest.cupos || 1)) {
+            if (cantidadConfirmada < 1 || cantidadConfirmada > guest.cupos_reservados) {
                 showError('La cantidad confirmada no es válida.');
                 return;
             }
         }
 
         try {
-            const payload = {
-                confirmado,
-                cantidad_confirmada: cantidadConfirmada,
-                mensaje: guestMessage || null,
-                fecha_confirmacion: new Date().toISOString()
-            };
-
-            const { error } = await supabaseClient
-                .from('invitados')
-                .update(payload)
-                .eq('id', guest.id);
-
-            if (error) {
-                throw error;
-            }
+            await submitRsvp(currentToken, asiste, cantidadConfirmada, null, guestMessage || null);
 
             showSuccess();
             document.getElementById('rsvpBox').classList.add('hidden');
