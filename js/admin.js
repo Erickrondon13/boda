@@ -89,7 +89,7 @@ function renderTable(guests) {
             ? `<span class="badge badge-rejected">No</span>`
             : `<span class="badge badge-pending">Pendiente</span>`;
 
-        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?id=' + guest.token);
+        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
 
         return `
             <tr>
@@ -132,7 +132,7 @@ async function copyAllLinks() {
     }
 
     const lines = allGuests.map(guest => {
-        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?id=' + guest.token);
+        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
         return `${guest.nombre_apellido}: ${link}`;
     });
     const text = lines.join('\n');
@@ -164,7 +164,7 @@ function exportGuestsCsv() {
     ];
 
     const rows = allGuests.map(guest => {
-        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?id=' + guest.token);
+        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
         return [
             csvValue(guest.nombre_apellido),
             csvValue(guest.cupos),

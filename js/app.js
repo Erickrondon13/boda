@@ -1,5 +1,5 @@
 let currentGuest = null;
-let currentId = null;
+let currentToken = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initInvitation();
@@ -11,15 +11,15 @@ async function initInvitation() {
     const errorBox = document.getElementById('errorBox');
 
     try {
-        currentId = getIdFromUrl();
+        currentToken = getTokenFromUrl();
 
-        if (!currentId) {
+        if (!currentToken) {
             guestLoading.classList.add('hidden');
             guestContent.classList.remove('hidden');
             return;
         }
 
-        const guest = await fetchGuest(currentId);
+        const guest = await fetchGuest(currentToken);
         currentGuest = guest;
 
         renderGuestInfo(guest);
@@ -36,16 +36,16 @@ async function initInvitation() {
     }
 }
 
-function getIdFromUrl() {
+function getTokenFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('id');
+    return params.get('token') || params.get('id');
 }
 
-async function fetchGuest(id) {
+async function fetchGuest(token) {
     const { data, error } = await supabaseClient
         .from('invitados')
         .select('*')
-        .eq('id', id)
+        .eq('token', token)
         .single();
 
     if (error || !data) throw new Error('Invitación no válida o invitado no encontrado.');
