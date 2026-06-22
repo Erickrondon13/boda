@@ -24,7 +24,7 @@ async function loadGuests() {
     tbody.innerHTML = `<tr><td colspan="9" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
-        .from('vw_invitados_rsvp')
+        .from('v_invitados_admin')
         .select('*')
         .order('nombre_apellido', { ascending: true });
 
@@ -48,9 +48,9 @@ function applyFilters() {
 
         let matchStatus = true;
         if (status === 'confirmed') {
-            matchStatus = guest.estado_rsvp === 'confirmado';
+            matchStatus = guest.confirmado === true;
         } else if (status === 'pending') {
-            matchStatus = guest.estado_rsvp === 'pendiente' || guest.estado_rsvp === null;
+            matchStatus = guest.confirmado === false || guest.confirmado === null;
         }
 
         return matchName && matchStatus;
@@ -62,8 +62,8 @@ function applyFilters() {
 
 function renderStats(guests) {
     const total = guests.length;
-    const confirmed = guests.filter(g => g.estado_rsvp === 'confirmado').length;
-    const pending = guests.filter(g => g.estado_rsvp === 'pendiente' || !g.estado_rsvp).length;
+    const confirmed = guests.filter(g => g.confirmado === true).length;
+    const pending = guests.filter(g => g.confirmado === false || g.confirmado === null).length;
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
@@ -83,18 +83,18 @@ function renderTable(guests) {
     }
 
     tbody.innerHTML = guests.map(guest => {
-        const statusBadge = guest.estado_rsvp === 'confirmado'
+        const statusBadge = guest.confirmado === true
             ? `<span class="badge badge-confirmed">Sí</span>`
-            : guest.estado_rsvp === 'rechazado'
+            : guest.confirmado === false
             ? `<span class="badge badge-rejected">No</span>`
             : `<span class="badge badge-pending">Pendiente</span>`;
 
-        const link = PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token;
+        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?id=' + guest.token);
 
         return `
             <tr>
                 <td>${escapeHtml(guest.nombre_apellido)}</td>
-                <td>${guest.cupos_reservados ?? ''}</td>
+                <td>${guest.cupos ?? ''}</td>
                 <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
                 <td class="token-cell">${guest.token}</td>
@@ -102,7 +102,7 @@ function renderTable(guests) {
                     <a href="${link}" target="_blank">${link}</a>
                 </td>
                 <td class="message-cell">${escapeHtml(guest.mensaje || '')}</td>
-                <td>${formatDate(guest.confirmado_en)}</td>
+                <td>${formatDate(guest.fecha_confirmacion)}</td>
                 <td>
                     <div class="row-actions">
                         <button class="action-btn" onclick="copyText('${guest.token}')">Copiar token</button>
@@ -132,7 +132,7 @@ async function copyAllLinks() {
     }
 
     const lines = allGuests.map(guest => {
-        const link = PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token;
+        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?id=' + guest.token);
         return `${guest.nombre_apellido}: ${link}`;
     });
     const text = lines.join('\n');
@@ -154,26 +154,26 @@ function exportGuestsCsv() {
 
     const headers = [
         'nombre_apellido',
-        'cupos_reservados',
-        'estado_rsvp',
+        'cupos',
+        'confirmado',
         'cantidad_confirmada',
         'token',
         'link_invitacion',
         'mensaje',
-        'confirmado_en'
+        'fecha_confirmacion'
     ];
 
     const rows = allGuests.map(guest => {
-        const link = PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token;
+        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?id=' + guest.token);
         return [
             csvValue(guest.nombre_apellido),
-            csvValue(guest.cupos_reservados),
-            csvValue(guest.estado_rsvp || 'pendiente'),
+            csvValue(guest.cupos),
+            csvValue(guest.confirmado === true ? 'Sí' : guest.confirmado === false ? 'No' : 'Pendiente'),
             csvValue(guest.cantidad_confirmada ?? ''),
             csvValue(guest.token),
             csvValue(link),
             csvValue(guest.mensaje || ''),
-            csvValue(formatDate(guest.confirmado_en))
+            csvValue(formatDate(guest.fecha_confirmacion))
         ];
     });
 

@@ -1,5 +1,5 @@
 let currentGuest = null;
-let currentToken = null;
+let currentId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     initInvitation();
@@ -11,13 +11,13 @@ async function initInvitation() {
     const errorBox = document.getElementById('errorBox');
 
     try {
-        currentToken = getTokenFromUrl();
+        currentId = getIdFromUrl();
 
-        if (!currentToken) {
-            throw new Error('No se encontró el token de invitación en la URL.');
+        if (!currentId) {
+            throw new Error('No se encontró el ID de invitación en la URL.');
         }
 
-        const guest = await fetchGuestByToken(currentToken);
+        const guest = await fetchGuest(currentId);
         currentGuest = guest;
 
         renderGuestInfo(guest);
@@ -34,9 +34,20 @@ async function initInvitation() {
     }
 }
 
-function getTokenFromUrl() {
+function getIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return params.get('token');
+    return params.get('id');
+}
+
+async function fetchGuest(id) {
+    const { data, error } = await supabaseClient
+        .from('invitados')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error || !data) throw new Error('Invitación no válida o invitado no encontrado.');
+    return data;
 }
 
 function renderGuestInfo(guest) {
@@ -49,9 +60,9 @@ function renderGuestInfo(guest) {
     const attendanceSelect = document.getElementById('attendanceSelect');
 
     guestNameEl.textContent = guest.nombre_apellido;
-    guestSlotsEl.textContent = guest.cupos_reservados;
+    guestSlotsEl.textContent = guest.cupos;
 
-    fillConfirmedCountOptions(confirmedCount, guest.cupos_reservados);
+    fillConfirmedCountOptions(confirmedCount, guest.cupos);
 
     attendanceSelect.addEventListener('change', () => {
         if (attendanceSelect.value === 'si') {
@@ -63,23 +74,10 @@ function renderGuestInfo(guest) {
 
     companionsGroup.classList.add('hidden');
 
-    checkExistingConfirmation(guest.id);
-}
-
-async function checkExistingConfirmation(invitadoId) {
-    const alreadyConfirmedBox = document.getElementById('alreadyConfirmedBox');
-    const rsvpBox = document.getElementById('rsvpBox');
-
-    try {
-        const existing = await fetchExistingRsvp(invitadoId);
-        if (existing) {
-            alreadyConfirmedBox.classList.remove('hidden');
-            rsvpBox.classList.add('hidden');
-        } else {
-            alreadyConfirmedBox.classList.add('hidden');
-            rsvpBox.classList.remove('hidden');
-        }
-    } catch {
+    if (guest.confirmado) {
+        alreadyConfirmedBox.classList.remove('hidden');
+        rsvpBox.classList.add('hidden');
+    } else {
         alreadyConfirmedBox.classList.add('hidden');
         rsvpBox.classList.remove('hidden');
     }
@@ -107,7 +105,6 @@ function bindRsvpForm(guest) {
 
         const attendanceValue = document.getElementById('attendanceSelect').value;
         const confirmedCountValue = document.getElementById('confirmedCount').value;
-        const guestMessage = document.getElementById('guestMessage').value.trim();
 
         if (!attendanceValue) {
             showError('Por favor selecciona si asistirás o no.');
@@ -121,14 +118,25 @@ function bindRsvpForm(guest) {
             asiste = true;
             cantidadConfirmada = Number(confirmedCountValue || 1);
 
-            if (cantidadConfirmada < 1 || cantidadConfirmada > guest.cupos_reservados) {
+            if (cantidadConfirmada < 1 || cantidadConfirmada > guest.cupos) {
                 showError('La cantidad confirmada no es válida.');
                 return;
             }
         }
 
         try {
-            await submitRsvp(currentToken, asiste, cantidadConfirmada, null, guestMessage || null);
+            const now = new Date().toISOString();
+
+            const { error } = await supabaseClient
+                .from('invitados')
+                .update({
+                    confirmado: asiste,
+                    cantidad_confirmada: cantidadConfirmada,
+                    fecha_confirmacion: now
+                })
+                .eq('id', guest.id);
+
+            if (error) throw error;
 
             showSuccess();
             document.getElementById('rsvpBox').classList.add('hidden');
@@ -141,7 +149,9 @@ function bindRsvpForm(guest) {
 
 function showSuccess() {
     const successBox = document.getElementById('successBox');
+    const alreadyConfirmedBox = document.getElementById('alreadyConfirmedBox');
     successBox.classList.remove('hidden');
+    alreadyConfirmedBox.classList.add('hidden');
 }
 
 function showError(message) {
