@@ -1,5 +1,5 @@
 const ROLE_CONFIG = {
-    'Dama de Honor': { icon: '👗', color: 'var(--mint)' },
+    'hay ': { icon: '👗', color: 'var(--mint)' },
     'Caballero de Honor': { icon: '🤵', color: 'var(--silver)' },
     Cantante: { icon: '🎤', color: 'var(--gold)' },
     Fotografo: { icon: '📷', color: 'var(--navy-light)' },

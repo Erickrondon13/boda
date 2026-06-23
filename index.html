@@ -6,6 +6,15 @@
     <title>Erick & Telma | Nuestra Boda</title>
 
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:title" content="Erick & Telma | Nuestra Boda" />
+    <meta property="og:description" content="Te invitamos a celebrar el día más especial de nuestras vidas. 15 de noviembre de 2026." />
+    <meta property="og:image" content="https://erickrondon13.github.io/boda/assets/banner.jpeg" />
+    <meta property="og:url" content="https://erickrondon13.github.io/boda/" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -15,6 +24,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+    <!-- CARTA DE INVITACION -->
+    <div class="letter-overlay" id="letterOverlay">
+        <div class="letter-card">
+            <div class="letter-seal">💌</div>
+            <h2 class="letter-title">ABRIR</h2>
+            <p class="letter-to">Para: <strong id="letterGuestName">tu</strong></p>
+            <p class="letter-hint">Haz clic en la carta para entrar</p>
+            <div class="letter-underline"></div>
+        </div>
+    </div>
+
     <main class="wedding-page">
 
         <!-- HERO -->
@@ -233,8 +254,65 @@
         </section>
     </main>
 
+    <audio id="bgMusic" loop preload="auto">
+        <source src="assets/base.webm" type="audio/webm" />
+    </audio>
+
+    <button class="music-btn" id="musicBtn" title="Play / Pause">♪</button>
+
     <script src="js/supabase.js"></script>
     <script src="js/countdown.js"></script>
     <script src="js/app.js"></script>
+
+    <script>
+        (function() {
+            var overlay = document.getElementById('letterOverlay');
+            var nameEl = document.getElementById('letterGuestName');
+            var audio = document.getElementById('bgMusic');
+            var musicBtn = document.getElementById('musicBtn');
+            var isPlaying = false;
+
+            function toggleMusic() {
+                if (isPlaying) {
+                    audio.pause();
+                    musicBtn.classList.remove('playing');
+                } else {
+                    audio.play().then(function() {
+                        musicBtn.classList.add('playing');
+                    }).catch(function() {});
+                }
+                isPlaying = !isPlaying;
+            }
+
+            musicBtn?.addEventListener('click', toggleMusic);
+
+            overlay?.addEventListener('click', function() {
+                this.classList.add('hidden');
+                if (audio) {
+                    audio.play().then(function() {
+                        isPlaying = true;
+                        if (musicBtn) musicBtn.classList.add('playing');
+                    }).catch(function() {});
+                }
+            });
+
+            var params = new URLSearchParams(window.location.search);
+            var token = params.get('token') || params.get('id');
+
+            if (token && nameEl) {
+                supabaseClient
+                    .from('invitados')
+                    .select('nombre_apellido')
+                    .eq('token', token)
+                    .single()
+                    .then(function(res) {
+                        if (res.data && res.data.nombre_apellido) {
+                            nameEl.textContent = res.data.nombre_apellido;
+                        }
+                    })
+                    .catch(function() {});
+            }
+        })();
+    </script>
 </body>
 </html>

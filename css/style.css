@@ -131,9 +131,12 @@ body {
 }
 
 .hero-guest {
-    margin: 14px 0 0;
-    font-size: 1.05rem;
-    opacity: 0.85;
+    margin: 18px 0 0;
+    font-size: 1.35rem;
+    font-weight: 400;
+    opacity: 0.95;
+    font-family: var(--font-title);
+    letter-spacing: 0.04em;
 }
 
 /* ───── CARDS ───── */
@@ -653,4 +656,146 @@ body {
     .gift-highlight {
         padding: 18px 20px;
     }
+
+    .letter-card {
+        padding: 40px 24px;
+        max-width: 340px;
+    }
+
+    .letter-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* ───── LETTER OVERLAY ───── */
+
+.letter-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(ellipse at center, rgba(26, 39, 68, 0.88) 0%, rgba(10, 15, 30, 0.95) 100%);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.letter-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.letter-card {
+    background: linear-gradient(160deg, #fcf9f5 0%, #f5ede4 100%);
+    border-radius: 24px;
+    padding: 50px 36px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    animation: letterFloat 2s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.letter-card:hover {
+    transform: scale(1.02);
+}
+
+.letter-seal {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    animation: letterPulse 1.5s ease-in-out infinite;
+}
+
+.letter-title {
+    font-family: var(--font-title);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--navy);
+    letter-spacing: 0.15em;
+    margin: 0 0 20px;
+}
+
+.letter-to {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0 0 10px;
+    font-weight: 300;
+}
+
+.letter-to strong {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 1.1rem;
+}
+
+.letter-hint {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    margin: 0 0 24px;
+}
+
+.letter-underline {
+    width: 60px;
+    height: 2px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--navy), transparent);
+    opacity: 0.3;
+}
+
+/* ───── MUSIC BUTTON ───── */
+
+.music-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: var(--navy);
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(26, 39, 68, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 28px rgba(26, 39, 68, 0.35);
+}
+
+.music-btn.playing {
+    animation: musicSpin 3s linear infinite;
+    background: var(--mint-dark);
+}
+
+@keyframes musicSpin {
+    0% { box-shadow: 0 6px 20px rgba(26, 39, 68, 0.25); }
+    50% { box-shadow: 0 6px 30px rgba(184, 212, 199, 0.5); }
+    100% { box-shadow: 0 6px 20px rgba(26, 39, 68, 0.25); }
+}
+
+@keyframes letterFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes letterPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
 }

@@ -90,7 +90,33 @@
         </section>
     </main>
 
+    <audio id="bgMusic" loop preload="auto">
+        <source src="assets/base.webm" type="audio/webm" />
+    </audio>
+
+    <button class="music-btn" id="musicBtn" title="Play / Pause">♪</button>
+
     <script src="js/supabase.js"></script>
     <script src="js/admin.js"></script>
+
+    <script>
+        (function() {
+            var audio = document.getElementById('bgMusic');
+            var musicBtn = document.getElementById('musicBtn');
+            var isPlaying = false;
+
+            musicBtn?.addEventListener('click', function() {
+                if (isPlaying) {
+                    audio.pause();
+                    musicBtn.classList.remove('playing');
+                } else {
+                    audio.play().then(function() {
+                        musicBtn.classList.add('playing');
+                    }).catch(function() {});
+                }
+                isPlaying = !isPlaying;
+            });
+        })();
+    </script>
 </body>
 </html>

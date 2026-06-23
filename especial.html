@@ -6,6 +6,15 @@
     <title>Invitación Especial | Erick & Telma</title>
 
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:title" content="Invitación Especial | Erick & Telma" />
+    <meta property="og:description" content="Invitación especial para ser parte de nuestra ceremonia. 15 de noviembre de 2026." />
+    <meta property="og:image" content="https://erickrondon13.github.io/boda/assets/banner.jpeg" />
+    <meta property="og:url" content="https://erickrondon13.github.io/boda/especial.html" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -138,7 +147,43 @@
 
     </main>
 
+    <audio id="bgMusic" loop preload="auto">
+        <source src="assets/base.webm" type="audio/webm" />
+    </audio>
+
+    <button class="music-btn" id="musicBtn" title="Play / Pause">♪</button>
+
     <script src="js/supabase.js"></script>
     <script src="js/especial.js"></script>
+
+    <script>
+        (function() {
+            var audio = document.getElementById('bgMusic');
+            var musicBtn = document.getElementById('musicBtn');
+            var isPlaying = false;
+
+            musicBtn?.addEventListener('click', function() {
+                if (isPlaying) {
+                    audio.pause();
+                    musicBtn.classList.remove('playing');
+                } else {
+                    audio.play().then(function() {
+                        musicBtn.classList.add('playing');
+                    }).catch(function() {});
+                }
+                isPlaying = !isPlaying;
+            });
+
+            document.addEventListener('click', function initMusic() {
+                if (!isPlaying && audio) {
+                    audio.play().then(function() {
+                        isPlaying = true;
+                        if (musicBtn) musicBtn.classList.add('playing');
+                    }).catch(function() {});
+                }
+                document.removeEventListener('click', initMusic);
+            }, { once: true });
+        })();
+    </script>
 </body>
 </html>
