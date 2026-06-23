@@ -189,6 +189,11 @@ body {
     color: #8b5a17;
 }
 
+.badge-especial {
+    background: #e8eef8;
+    color: #1a2744;
+}
+
 .token-cell,
 .link-cell {
     max-width: 260px;

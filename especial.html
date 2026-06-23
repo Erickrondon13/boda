@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invitación Especial | Erick & Telma</title>
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/especial.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <main class="wedding-page especial-page">
+
+        <!-- HERO -->
+        <section class="hero especial-hero">
+            <div class="hero-overlay"></div>
+            <img src="assets/banner.jpeg" alt="Erick y Telma" class="hero-image" />
+            <div class="hero-content">
+                <p class="hero-kicker">Invitación Especial</p>
+                <h1>Erick <span>&</span> Telma</h1>
+                <p class="hero-date-main">15 de noviembre de 2026</p>
+            </div>
+        </section>
+
+        <!-- LOADING -->
+        <section class="card" id="loadingSection">
+            <p class="guest-loading">Cargando invitación especial...</p>
+        </section>
+
+        <!-- ERROR -->
+        <section class="card hidden" id="errorSection">
+            <div class="error-box" id="errorBox"></div>
+        </section>
+
+        <!-- CONTENT -->
+        <section class="card hidden" id="contentSection">
+
+            <!-- Role header -->
+            <div class="role-badge" id="roleBadge">
+                <span class="role-icon" id="roleIcon">⭐</span>
+                <span class="role-label" id="roleLabel">Dama de Honor</span>
+            </div>
+
+            <p class="especial-saludo" id="especialSaludo">
+                Hemos preparado un lugar muy especial para ti en nuestra boda.
+                Tu presencia y apoyo significan mucho para nosotros.
+            </p>
+
+            <!-- Dress Code -->
+            <div class="dress-code-section">
+                <h2>Código de Vestimenta</h2>
+                <p class="dress-code-sub">Viste de acuerdo a tu rol en la ceremonia</p>
+
+                <div class="dress-code-grid">
+                    <div class="dress-code-item novia">
+                        <div class="dress-swatch swatch-white"></div>
+                        <div class="dress-info">
+                            <span class="dress-role">Novia</span>
+                            <span class="dress-colors">Blanco + Azul Marino</span>
+                        </div>
+                    </div>
+
+                    <div class="dress-code-item novio">
+                        <div class="dress-swatch swatch-navy"></div>
+                        <div class="dress-info">
+                            <span class="dress-role">Novio</span>
+                            <span class="dress-colors">Azul Marino</span>
+                        </div>
+                    </div>
+
+                    <div class="dress-code-item dama" id="dressDama">
+                        <div class="dress-swatch swatch-mint"></div>
+                        <div class="dress-info">
+                            <span class="dress-role">Dama de Honor</span>
+                            <span class="dress-colors">Verde menta claro</span>
+                        </div>
+                    </div>
+
+                    <div class="dress-code-item caballero" id="dressCaballero">
+                        <div class="dress-swatch swatch-silver"></div>
+                        <div class="dress-info">
+                            <span class="dress-role">Caballero de Honor</span>
+                            <span class="dress-colors">Gris plata</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RSVP Especial -->
+            <div class="rsvp-especial-box" id="rsvpEspecialBox">
+                <h3>¿Aceptas este rol especial?</h3>
+                <p class="rsvp-help">
+                    Nos encantaría que seas parte activa de nuestra ceremonia.
+                </p>
+
+                <form id="rsvpEspecialForm">
+                    <div class="form-group">
+                        <label for="especialAttendanceSelect">¿Aceptas participar?</label>
+                        <select id="especialAttendanceSelect" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="si">Sí, acepto con gusto</option>
+                            <option value="no">Lo siento, no podré</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="especialMessage">Mensaje para los novios (opcional)</label>
+                        <textarea id="especialMessage" rows="4" placeholder="Escribe algo especial..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Confirmar
+                    </button>
+                </form>
+            </div>
+
+            <div class="rsvp-especial-box hidden" id="especialAlreadyConfirmed">
+                <h3>✅ ¡Respuesta Registrada!</h3>
+                <p id="especialConfirmedText">Gracias por aceptar ser parte de nuestro día especial.</p>
+                <p class="signature">Erick Rondón & Telma Verónica</p>
+            </div>
+
+            <div class="rsvp-especial-box hidden" id="especialSuccessBox">
+                <h3>✅ ¡Gracias!</h3>
+                <p id="especialSuccessText">Tu respuesta ha sido registrada.</p>
+                <p class="signature">Erick Rondón & Telma Verónica</p>
+            </div>
+
+        </section>
+
+        <!-- Volver -->
+        <section class="card back-card">
+            <p class="back-text">¿Eres un invitado regular?</p>
+            <a href="index.html" class="btn btn-primary">Ver invitación general</a>
+        </section>
+
+    </main>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/especial.js"></script>
+</body>
+</html>

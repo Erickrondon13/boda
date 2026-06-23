@@ -3,6 +3,8 @@
   "buildCommand": null,
   "outputDirectory": ".",
   "rewrites": [
+    { "source": "/admin.html", "destination": "/admin.html" },
+    { "source": "/especial.html", "destination": "/especial.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [

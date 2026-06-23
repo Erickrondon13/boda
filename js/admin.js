@@ -21,7 +21,7 @@ function bindAdminEvents() {
 
 async function loadGuests() {
     const tbody = document.getElementById('adminTableBody');
-    tbody.innerHTML = `<tr><td colspan="9" class="empty-row">Cargando invitados...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
         .from('v_invitados_admin')
@@ -30,7 +30,7 @@ async function loadGuests() {
 
     if (error) {
         console.error(error);
-        tbody.innerHTML = `<tr><td colspan="9" class="empty-row">Error cargando invitados</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Error cargando invitados</td></tr>`;
         return;
     }
 
@@ -78,7 +78,7 @@ function renderTable(guests) {
     const tbody = document.getElementById('adminTableBody');
 
     if (!guests.length) {
-        tbody.innerHTML = `<tr><td colspan="9" class="empty-row">No hay invitados para mostrar</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">No hay invitados para mostrar</td></tr>`;
         return;
     }
 
@@ -91,15 +91,34 @@ function renderTable(guests) {
 
         const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
 
+        const especialBadge = guest.tipo_invitacion_especial
+            ? `<span class="badge badge-especial">${escapeHtml(guest.tipo_invitacion_especial)}</span>`
+            : `<span class="badge badge-pending">—</span>`;
+
+        const especialAceptadaBadge = guest.tipo_invitacion_especial
+            ? (guest.invitacion_especial_aceptada === true
+                ? `<span class="badge badge-confirmed">Sí</span>`
+                : guest.invitacion_especial_aceptada === false
+                ? `<span class="badge badge-rejected">No</span>`
+                : `<span class="badge badge-pending">Pendiente</span>`)
+            : `<span class="badge badge-pending">—</span>`;
+
+        const especialLink = guest.link_invitacion_especial || (PUBLIC_INVITATION_BASE_URL.replace('index.html', 'especial.html') + '?token=' + guest.token);
+
         return `
             <tr>
                 <td>${escapeHtml(guest.nombre_apellido)}</td>
                 <td>${guest.cupos ?? ''}</td>
                 <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
+                <td>${especialBadge}</td>
+                <td>${especialAceptadaBadge}</td>
                 <td class="token-cell">${guest.token}</td>
                 <td class="link-cell">
                     <a href="${link}" target="_blank">${link}</a>
+                </td>
+                <td class="link-cell">
+                    ${guest.tipo_invitacion_especial ? `<a href="${especialLink}" target="_blank">${especialLink}</a>` : '—'}
                 </td>
                 <td class="message-cell">${escapeHtml(guest.mensaje || '')}</td>
                 <td>${formatDate(guest.fecha_confirmacion)}</td>
@@ -107,6 +126,7 @@ function renderTable(guests) {
                     <div class="row-actions">
                         <button class="action-btn" onclick="copyText('${guest.token}')">Copiar token</button>
                         <button class="action-btn primary" onclick="copyText('${escapeForJs(link)}')">Copiar link</button>
+                        <button class="action-btn" onclick="copyText('${escapeForJs(especialLink)}')">Copiar esp.</button>
                         <button class="action-btn" onclick="window.open('${escapeForJs(link)}', '_blank')">Abrir</button>
                     </div>
                 </td>
