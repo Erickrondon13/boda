@@ -1,19 +1,24 @@
 :root {
     --bg: #f7f1eb;
     --bg-soft: #fbf8f4;
-    --card: rgba(255, 255, 255, 0.9);
-    --text: #4c3a32;
+    --card: rgba(255, 255, 255, 0.92);
+    --text: #3a2e28;
     --muted: #8a7568;
     --gold: #b08d57;
     --gold-dark: #8f7045;
-    --border: rgba(176, 141, 87, 0.25);
-    --shadow: 0 18px 45px rgba(76, 58, 50, 0.12);
+    --gold-light: #d4bf8a;
+    --silver: #c0c0c0;
+    --silver-light: #e8e6e3;
+    --silver-dark: #a0a0a0;
+    --border: rgba(176, 141, 87, 0.2);
+    --shadow: 0 18px 45px rgba(76, 58, 50, 0.10);
+    --shadow-hover: 0 24px 55px rgba(76, 58, 50, 0.16);
     --radius-xl: 28px;
     --radius-lg: 18px;
     --radius-md: 12px;
     --max-width: 980px;
-    --font-title: "Georgia", "Times New Roman", serif;
-    --font-body: "Inter", "Segoe UI", Arial, sans-serif;
+    --font-title: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+    --font-body: "Montserrat", "Inter", "Segoe UI", Arial, sans-serif;
 }
 
 * {
@@ -31,6 +36,8 @@ body {
         linear-gradient(180deg, #000000 0%, #000000 100%);
     color: var(--text);
     font-family: var(--font-body);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
 }
 
 .hidden {
@@ -42,6 +49,8 @@ body {
     margin: 0 auto;
     padding: 24px 16px 60px;
 }
+
+/* ───── HERO ───── */
 
 .hero {
     position: relative;
@@ -85,6 +94,7 @@ body {
     letter-spacing: 0.35em;
     text-transform: uppercase;
     font-size: 0.8rem;
+    font-weight: 300;
     opacity: 0.9;
 }
 
@@ -94,6 +104,7 @@ body {
     font-size: clamp(2.8rem, 6vw, 5rem);
     font-weight: 700;
     line-height: 1.05;
+    letter-spacing: 0.02em;
 }
 
 .hero h1 span {
@@ -104,6 +115,7 @@ body {
     margin-top: 14px;
     font-size: 1.15rem;
     letter-spacing: 0.08em;
+    font-weight: 300;
 }
 
 .hero-guest {
@@ -112,44 +124,90 @@ body {
     opacity: 0.85;
 }
 
-.intro-guest {
-    margin: 12px 0 0;
-    font-style: italic;
-    color: var(--muted);
-}
+/* ───── CARDS ───── */
 
 .card {
     background: var(--card);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
-    padding: 28px 22px;
+    padding: 36px 28px;
     box-shadow: var(--shadow);
-    margin-bottom: 20px;
+    margin-bottom: 22px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(
+        135deg,
+        transparent 40%,
+        rgba(192, 192, 192, 0.08) 50%,
+        transparent 60%
+    );
+    background-size: 200% 200%;
+    opacity: 0;
+    transition: opacity 0.5s ease, background-position 0.5s ease;
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(192, 192, 192, 0.35);
+}
+
+.card:hover::before {
+    opacity: 1;
+    background-position: 100% 100%;
 }
 
 .card h2 {
     margin: 0 0 18px;
     font-family: var(--font-title);
-    font-size: 2rem;
+    font-size: 2.2rem;
+    font-weight: 600;
     color: var(--gold-dark);
     text-align: center;
+    letter-spacing: 0.02em;
 }
+
+/* ───── SECTION ICON ───── */
 
 .section-icon {
     text-align: center;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     color: var(--gold);
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
+
+/* ───── INTRO ───── */
 
 .intro-text {
     max-width: 720px;
     margin: 0 auto;
     text-align: center;
-    line-height: 1.8;
-    font-size: 1.08rem;
+    line-height: 1.9;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--text);
 }
+
+.intro-guest {
+    margin: 16px 0 0;
+    font-style: italic;
+    color: var(--muted);
+    font-weight: 400;
+}
+
+/* ───── COUNTDOWN ───── */
 
 .countdown {
     display: grid;
@@ -161,22 +219,35 @@ body {
     background: linear-gradient(180deg, #fff 0%, #f8f2ea 100%);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 18px 10px;
+    padding: 20px 10px;
     text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.count-box:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: var(--silver);
+    box-shadow: 0 8px 25px rgba(192, 192, 192, 0.2);
 }
 
 .count-box span {
     display: block;
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
     color: var(--gold-dark);
+    font-family: var(--font-title);
+    line-height: 1.1;
 }
 
 .count-box small {
     color: var(--muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 500;
 }
+
+/* ───── LOCATION / GIFTS / DRESS ───── */
 
 .location-card,
 .gifts-card,
@@ -185,26 +256,33 @@ body {
 }
 
 .place-name {
-    font-size: 1.25rem;
-    margin: 0 0 16px;
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 18px;
+    color: var(--gold-dark);
 }
+
+/* ───── BUTTONS ───── */
 
 .btn {
     border: none;
     border-radius: 999px;
-    padding: 13px 22px;
-    font-size: 0.95rem;
+    padding: 14px 28px;
+    font-size: 0.9rem;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
+    font-weight: 500;
+    font-family: var(--font-body);
+    letter-spacing: 0.04em;
 }
 
 .btn:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 }
 
 .btn-primary {
@@ -215,11 +293,14 @@ body {
 
 .btn-primary:hover {
     background: linear-gradient(135deg, var(--gold-dark) 0%, #c09d63 100%);
+    box-shadow: 0 14px 28px rgba(176, 141, 87, 0.35);
 }
 
 .btn-block {
     width: 100%;
 }
+
+/* ───── TIMELINE ───── */
 
 .timeline {
     position: relative;
@@ -235,12 +316,20 @@ body {
     background: #fff;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    padding: 16px;
+    padding: 18px 16px;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-item:hover {
+    transform: translateX(6px);
+    border-color: var(--silver);
+    box-shadow: 0 8px 25px rgba(192, 192, 192, 0.15);
 }
 
 .timeline-time {
-    font-weight: 700;
+    font-weight: 600;
     color: var(--gold-dark);
+    font-size: 0.95rem;
 }
 
 .timeline-icon {
@@ -253,12 +342,21 @@ body {
     justify-content: center;
     font-size: 1.5rem;
     border: 1px solid var(--border);
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.timeline-item:hover .timeline-icon {
+    border-color: var(--silver);
+    background: #f0ece8;
 }
 
 .timeline-content h3 {
     margin: 0;
     font-size: 1.05rem;
+    font-weight: 500;
 }
+
+/* ───── DRESS CODE ───── */
 
 .dress-grid {
     display: grid;
@@ -272,28 +370,53 @@ body {
     background: #fff;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 18px;
+    padding: 22px 18px;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dress-box:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: var(--silver);
+    box-shadow: 0 8px 25px rgba(192, 192, 192, 0.2);
 }
 
 .dress-icon {
-    font-size: 2rem;
-    margin-bottom: 8px;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
 }
 
 .dress-text {
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
 }
+
+/* ───── GIFTS ───── */
 
 .gift-highlight {
     display: inline-flex;
     flex-direction: column;
-    gap: 6px;
-    margin-top: 10px;
+    gap: 8px;
+    margin-top: 12px;
     background: #fff;
-    padding: 18px 20px;
+    padding: 22px 24px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+.gift-highlight:hover {
+    transform: translateY(-3px);
+    border-color: var(--silver);
+    box-shadow: 0 8px 25px rgba(192, 192, 192, 0.2);
+}
+
+.gift-highlight strong {
+    font-size: 1.1rem;
+    color: var(--gold-dark);
+}
+
+/* ───── GUEST ───── */
 
 .guest-loading {
     text-align: center;
@@ -311,6 +434,10 @@ body {
     font-size: 1.05rem;
 }
 
+.guest-greeting strong {
+    font-weight: 600;
+}
+
 .rsvp-box,
 .already-confirmed,
 .success-box {
@@ -318,7 +445,15 @@ body {
     background: #fff;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border);
-    padding: 22px;
+    padding: 24px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rsvp-box:hover,
+.already-confirmed:hover,
+.success-box:hover {
+    border-color: var(--silver-light);
+    box-shadow: 0 8px 25px rgba(192, 192, 192, 0.10);
 }
 
 .rsvp-box h3,
@@ -326,11 +461,14 @@ body {
 .success-box h3 {
     margin-top: 0;
     color: var(--gold-dark);
+    font-family: var(--font-title);
+    font-size: 1.4rem;
 }
 
 .rsvp-help {
     color: var(--muted);
     margin-top: -6px;
+    font-weight: 300;
 }
 
 .form-group {
@@ -341,7 +479,8 @@ body {
 }
 
 .form-group label {
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .form-group input,
@@ -355,18 +494,21 @@ body {
     background: #fff;
     color: var(--text);
     outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 4px rgba(176, 141, 87, 0.12);
+    border-color: var(--silver);
+    box-shadow: 0 0 0 4px rgba(192, 192, 192, 0.12);
 }
 
 .signature {
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 0;
+    font-family: var(--font-title);
+    font-size: 1.1rem;
 }
 
 .error-box {
@@ -378,9 +520,15 @@ body {
     border: 1px solid #f0c8c8;
 }
 
+/* ───── RESPONSIVE ───── */
+
 @media (max-width: 768px) {
     .hero {
         min-height: 60vh;
+    }
+
+    .card {
+        padding: 24px 18px;
     }
 
     .countdown {
@@ -390,6 +538,10 @@ body {
     .timeline-item {
         grid-template-columns: 1fr;
         text-align: center;
+    }
+
+    .timeline-item:hover {
+        transform: translateY(-3px);
     }
 
     .timeline-time {
