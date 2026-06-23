@@ -95,6 +95,15 @@
     box-shadow: 0 6px 20px rgba(192, 192, 192, 0.15);
 }
 
+.dress-code-img {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
 .dress-code-item.highlighted {
     border-color: var(--navy);
     box-shadow: 0 0 0 2px rgba(26, 39, 68, 0.15), 0 6px 20px rgba(26, 39, 68, 0.1);

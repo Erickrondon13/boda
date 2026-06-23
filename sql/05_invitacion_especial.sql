@@ -3,7 +3,7 @@ drop view if exists public.v_invitados_admin;
 
 -- 2. Agregar columnas
 alter table public.invitados add column if not exists tipo_invitacion_especial text;
-alter table public.invitados add column if not exists invitacion_especial_aceptada boolean default false;
+alter table public.invitados add column if not exists invitacion_especial_aceptada boolean;
 
 -- 3. Recrear vista con las nuevas columnas
 create view public.v_invitados_admin as
@@ -25,3 +25,8 @@ select
     'https://erickrondon13.github.io/boda/especial.html?token=' || i.token::text as link_invitacion_especial
 from public.invitados i
 order by i.nombre_apellido;
+
+
+
+update public.invitados
+set tipo_invitacion_especial = 'invitacion_especial'
