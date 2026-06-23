@@ -29,3 +29,7 @@ insert into public.invitados (nombre_apellido, cupos) values
 ('Luisa & Esneider', 2),
 ('Cristian', 2),
 ('Jenine Fryling & Jorge Marin', 2);
+
+
+insert into public.invitados (nombre_apellido, cupos) values 
+('Erick Rondon & Telma Veronica', 2);
