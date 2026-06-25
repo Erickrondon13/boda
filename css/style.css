@@ -14,7 +14,7 @@
     --silver-light: #e8e6e3;
     --silver-dark: #a0a0a0;
     --border: rgba(26, 39, 68, 0.1);
-    --shadow: 0 18px 45px rgba(26, 39, 68, 0.07);
+    --shadow: 5px 5px 20px grey;
     --shadow-hover: 0 24px 55px rgba(26, 39, 68, 0.13);
     --radius-xl: 28px;
     --radius-lg: 18px;
@@ -146,12 +146,27 @@ body {
 
 /* ───── CARDS ───── */
 
-.card {
-    background: var(--card);
-    backdrop-filter: blur(12px);
+.card { 
+    background-color: transparent;
+    background-image:
+        url("../assets/laterales.png"),
+        linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)),
+        url("../assets/fondo.jpg");
+    background-position:
+        right center,
+        center center,
+        center center;
+    background-size:
+        36px auto,
+        cover,
+        cover;
+    background-repeat:
+        repeat-y,
+        no-repeat,
+        no-repeat;
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
-    padding: 40px 30px;
+    padding: 40px 38px;
     box-shadow: var(--shadow);
     margin-bottom: 24px;
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -164,46 +179,33 @@ body {
 .card::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 0;
     right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--navy) 0%, var(--mint) 50%, var(--silver) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
+    width: 150px;
+    height: 150px;
+    background: url("../assets/esquina-abajo-derecha.png") no-repeat bottom right / contain;
     pointer-events: none;
+    z-index: 1;
+    opacity: 0.75;
 }
 
 .card::after {
     content: "";
     position: absolute;
-    inset: 0;
-    border-radius: var(--radius-xl);
-    background: linear-gradient(
-        135deg,
-        transparent 40%,
-        rgba(192, 192, 192, 0.06) 50%,
-        transparent 60%
-    );
-    background-size: 200% 200%;
-    opacity: 0;
-    transition: opacity 0.5s ease, background-position 0.5s ease;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 100%;
+    background: url("../assets/laterales.png") repeat-y left top / 32px auto;
     pointer-events: none;
+    z-index: 1;
+    opacity: 0.65;
 }
 
 .card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-hover);
     border-color: rgba(192, 192, 192, 0.3);
-}
-
-.card:hover::before {
-    opacity: 1;
-}
-
-.card:hover::after {
-    opacity: 1;
-    background-position: 100% 100%;
 }
 
 .card h2 {
@@ -460,6 +462,23 @@ body {
     font-size: 0.8rem;
     color: var(--muted);
     font-weight: 300;
+}
+
+.dress-restriction {
+    margin: 17px 50px 0;
+    padding: 14px 18px;
+    background: rgba(184, 212, 199, 0.15);
+    border: 1px solid rgba(184, 212, 199, 0.3);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.dress-restriction strong {
+    color: var(--navy);
 }
 
 /* ───── GIFTS ───── */
