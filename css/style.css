@@ -240,10 +240,11 @@ body {
 }
 
 .intro-guest {
-    margin: 16px 0 0;
+    margin: 16px 20px 0;
     font-style: italic;
     color: var(--muted);
-    font-weight: 400;
+    font-weight: 900;
+    text-align: center;
 }
 
 /* ───── COUNTDOWN ───── */
