@@ -1,8 +1,9 @@
 const ROLE_CONFIG = {
-    'hay ': { icon: '👗', color: 'var(--mint)' },
+    'Dama de Honor': { icon: '👗', color: 'var(--mint)' },
     'Caballero de Honor': { icon: '🤵', color: 'var(--silver)' },
     Cantante: { icon: '🎤', color: 'var(--gold)' },
     Fotografo: { icon: '📷', color: 'var(--navy-light)' },
+    Pastor: { icon: '⛪', color: 'var(--navy)' },
 };
 
 let currentGuest = null;
@@ -81,6 +82,7 @@ function renderRoleInfo(guest) {
         'Caballero de Honor': `${guest.nombre_apellido}, como Caballero de Honor, te queremos a nuestro lado en este día tan importante.`,
         'Cantante': `${guest.nombre_apellido}, tu voz hará que nuestra ceremonia sea aún más mágica.`,
         'Fotografo': `${guest.nombre_apellido}, confiamos en tu talento para capturar cada momento especial de nuestra boda.`,
+        'Pastor': `${guest.nombre_apellido}, confiamos en tu guía espiritual para bendecir nuestra unión y hacer de este momento algo sagrado.`,
     };
     especialSaludo.textContent = saludos[role] || `${guest.nombre_apellido}, tenemos un lugar especial para ti.`;
 
@@ -89,6 +91,8 @@ function renderRoleInfo(guest) {
         document.getElementById('dressDama')?.classList.add('highlighted');
     } else if (role === 'Caballero de Honor') {
         document.getElementById('dressCaballero')?.classList.add('highlighted');
+    } else if (role === 'Pastor') {
+        document.getElementById('dressPastor')?.classList.add('highlighted');
     }
 
     if (guest.invitacion_especial_aceptada !== null && guest.invitacion_especial_aceptada !== undefined) {
