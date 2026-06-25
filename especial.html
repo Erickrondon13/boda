@@ -24,6 +24,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+    <!-- CARTA DE INVITACION -->
+    <div class="letter-overlay" id="letterOverlay">
+        <div class="letter-card">
+            <div class="letter-seal">💌</div>
+            <h2 class="letter-title">ABRIR</h2>
+            <p class="letter-to">Para: <strong id="letterGuestName">tu</strong></p>
+            <p class="letter-hint">Haz clic en la carta para entrar</p>
+            <div class="letter-underline"></div>
+        </div>
+    </div>
+
     <main class="wedding-page especial-page">
 
         <!-- HERO -->
@@ -170,11 +182,13 @@
 
     <script>
         (function() {
+            var overlay = document.getElementById('letterOverlay');
+            var nameEl = document.getElementById('letterGuestName');
             var audio = document.getElementById('bgMusic');
             var musicBtn = document.getElementById('musicBtn');
             var isPlaying = false;
 
-            musicBtn?.addEventListener('click', function() {
+            function toggleMusic() {
                 if (isPlaying) {
                     audio.pause();
                     musicBtn.classList.remove('playing');
@@ -184,17 +198,36 @@
                     }).catch(function() {});
                 }
                 isPlaying = !isPlaying;
-            });
+            }
 
-            document.addEventListener('click', function initMusic() {
-                if (!isPlaying && audio) {
+            musicBtn?.addEventListener('click', toggleMusic);
+
+            overlay?.addEventListener('click', function() {
+                this.classList.add('hidden');
+                if (audio) {
                     audio.play().then(function() {
                         isPlaying = true;
                         if (musicBtn) musicBtn.classList.add('playing');
                     }).catch(function() {});
                 }
-                document.removeEventListener('click', initMusic);
-            }, { once: true });
+            });
+
+            var params = new URLSearchParams(window.location.search);
+            var token = params.get('token') || params.get('id');
+
+            if (token && nameEl) {
+                supabaseClient
+                    .from('invitados')
+                    .select('nombre_apellido')
+                    .eq('token', token)
+                    .single()
+                    .then(function(res) {
+                        if (res.data && res.data.nombre_apellido) {
+                            nameEl.textContent = res.data.nombre_apellido;
+                        }
+                    })
+                    .catch(function() {});
+            }
         })();
     </script>
 </body>
