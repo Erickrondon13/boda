@@ -33,3 +33,8 @@ insert into public.invitados (nombre_apellido, cupos) values
 
 insert into public.invitados (nombre_apellido, cupos) values 
 ('Erick Rondon & Telma Veronica', 2);
+
+
+
+insert into public.invitados (nombre_apellido, cupos, tipo_invitacion_especial) values  
+('Daniel Ospina', 1, 'Pastor');
