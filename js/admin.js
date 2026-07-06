@@ -11,17 +11,19 @@ function bindAdminEvents() {
     const btnExportCsv = document.getElementById('btnExportCsv');
     const searchInput = document.getElementById('searchInput');
     const statusFilter = document.getElementById('statusFilter');
+    const civilFilter = document.getElementById('civilFilter');
 
     btnRefresh?.addEventListener('click', loadGuests);
     btnCopyAllLinks?.addEventListener('click', copyAllLinks);
     btnExportCsv?.addEventListener('click', exportGuestsCsv);
     searchInput?.addEventListener('input', applyFilters);
     statusFilter?.addEventListener('change', applyFilters);
+    civilFilter?.addEventListener('change', applyFilters);
 }
 
 async function loadGuests() {
     const tbody = document.getElementById('adminTableBody');
-    tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Cargando invitados...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="17" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
         .from('v_invitados_admin')
@@ -30,7 +32,7 @@ async function loadGuests() {
 
     if (error) {
         console.error(error);
-        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Error cargando invitados</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="17" class="empty-row">Error cargando invitados</td></tr>`;
         return;
     }
 
@@ -42,6 +44,7 @@ async function loadGuests() {
 function applyFilters() {
     const search = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
     const status = document.getElementById('statusFilter')?.value || 'all';
+    const civil = document.getElementById('civilFilter')?.value || 'all';
 
     const filtered = allGuests.filter(guest => {
         const matchName = guest.nombre_apellido.toLowerCase().includes(search);
@@ -53,7 +56,14 @@ function applyFilters() {
             matchStatus = guest.confirmado === false || guest.confirmado === null;
         }
 
-        return matchName && matchStatus;
+        let matchCivil = true;
+        if (civil === 'civil') {
+            matchCivil = guest.civil === true;
+        } else if (civil === 'religiosa') {
+            matchCivil = guest.civil === false || guest.civil === null;
+        }
+
+        return matchName && matchStatus && matchCivil;
     });
 
     renderStats(filtered);
@@ -67,18 +77,20 @@ function renderStats(guests) {
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
+    const civilCount = guests.filter(g => g.civil === true).length;
 
     document.getElementById('statTotal').textContent = total;
     document.getElementById('statConfirmed').textContent = confirmed;
     document.getElementById('statPending').textContent = pending;
     document.getElementById('statConfirmedPeople').textContent = confirmedPeople;
+    document.getElementById('statCivil').textContent = civilCount;
 }
 
 function renderTable(guests) {
     const tbody = document.getElementById('adminTableBody');
 
     if (!guests.length) {
-        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">No hay invitados para mostrar</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="17" class="empty-row">No hay invitados para mostrar</td></tr>`;
         return;
     }
 
@@ -103,7 +115,14 @@ function renderTable(guests) {
                 : `<span class="badge badge-pending">Pendiente</span>`)
             : `<span class="badge badge-pending">—</span>`;
 
+        const civilStatusBadge = guest.civil_confirmado === true
+            ? `<span class="badge badge-confirmed">Sí</span>`
+            : guest.civil_confirmado === false
+            ? `<span class="badge badge-rejected">No</span>`
+            : `<span class="badge badge-pending">Pendiente</span>`;
+
         const especialLink = guest.link_invitacion_especial || (PUBLIC_INVITATION_BASE_URL.replace('index.html', 'especial.html') + '?token=' + guest.token);
+        const civilLink = guest.link_civil || (PUBLIC_INVITATION_BASE_URL.replace('index.html', 'civil.html') + '?token=' + guest.token);
 
         return `
             <tr>
@@ -111,6 +130,9 @@ function renderTable(guests) {
                 <td>${guest.cupos ?? ''}</td>
                 <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
+                <td>${guest.civil === true ? `<span class="badge badge-confirmed">Sí</span>` : `<span class="badge badge-pending">No</span>`}</td>
+                <td>${civilStatusBadge}</td>
+                <td>${guest.civil_cantidad_confirmada ?? ''}</td>
                 <td>${especialBadge}</td>
                 <td>${especialAceptadaBadge}</td>
                 <td class="token-cell">${guest.token}</td>
@@ -118,14 +140,19 @@ function renderTable(guests) {
                     <a href="${link}" target="_blank">${link}</a>
                 </td>
                 <td class="link-cell">
+                    ${guest.civil ? `<a href="${civilLink}" target="_blank">${civilLink}</a>` : '—'}
+                </td>
+                <td class="link-cell">
                     ${guest.tipo_invitacion_especial ? `<a href="${especialLink}" target="_blank">${especialLink}</a>` : '—'}
                 </td>
                 <td class="message-cell">${escapeHtml(guest.mensaje || '')}</td>
                 <td>${formatDate(guest.fecha_confirmacion)}</td>
+                <td>${formatDate(guest.civil_fecha_confirmacion)}</td>
                 <td>
                     <div class="row-actions">
                         <button class="action-btn" onclick="copyText('${guest.token}')">Copiar token</button>
                         <button class="action-btn primary" onclick="copyText('${escapeForJs(link)}')">Copiar link</button>
+                        <button class="action-btn ${guest.civil ? 'primary' : ''}" onclick="copyText('${escapeForJs(civilLink)}')">Copiar civil</button>
                         <button class="action-btn" onclick="copyText('${escapeForJs(especialLink)}')">Copiar esp.</button>
                         <button class="action-btn" onclick="window.open('${escapeForJs(link)}', '_blank')">Abrir</button>
                     </div>
@@ -153,6 +180,10 @@ async function copyAllLinks() {
 
     const lines = allGuests.map(guest => {
         const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
+        const civilLink = guest.link_civil || (PUBLIC_INVITATION_BASE_URL.replace('index.html', 'civil.html') + '?token=' + guest.token);
+        if (guest.civil) {
+            return `${guest.nombre_apellido}:\n  Religiosa: ${link}\n  Civil: ${civilLink}`;
+        }
         return `${guest.nombre_apellido}: ${link}`;
     });
     const text = lines.join('\n');
@@ -177,23 +208,34 @@ function exportGuestsCsv() {
         'cupos',
         'confirmado',
         'cantidad_confirmada',
+        'civil',
+        'civil_confirmado',
+        'civil_cantidad_confirmada',
         'token',
         'link_invitacion',
+        'link_civil',
         'mensaje',
-        'fecha_confirmacion'
+        'fecha_confirmacion',
+        'civil_fecha_confirmacion'
     ];
 
     const rows = allGuests.map(guest => {
         const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
+        const civilLink = guest.link_civil || (PUBLIC_INVITATION_BASE_URL.replace('index.html', 'civil.html') + '?token=' + guest.token);
         return [
             csvValue(guest.nombre_apellido),
             csvValue(guest.cupos),
             csvValue(guest.confirmado === true ? 'Sí' : guest.confirmado === false ? 'No' : 'Pendiente'),
             csvValue(guest.cantidad_confirmada ?? ''),
+            csvValue(guest.civil === true ? 'Sí' : 'No'),
+            csvValue(guest.civil_confirmado === true ? 'Sí' : guest.civil_confirmado === false ? 'No' : 'Pendiente'),
+            csvValue(guest.civil_cantidad_confirmada ?? ''),
             csvValue(guest.token),
             csvValue(link),
+            csvValue(civilLink),
             csvValue(guest.mensaje || ''),
-            csvValue(formatDate(guest.fecha_confirmacion))
+            csvValue(formatDate(guest.fecha_confirmacion)),
+            csvValue(formatDate(guest.civil_fecha_confirmacion))
         ];
     });
 

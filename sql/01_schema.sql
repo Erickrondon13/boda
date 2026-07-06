@@ -9,11 +9,16 @@ create table if not exists public.invitados (
     cantidad_confirmada integer not null default 0,
     telefono text,
     mensaje text,
+    civil boolean not null default false,
+    civil_confirmado boolean not null default false,
+    civil_cantidad_confirmada integer not null default 0,
+    civil_fecha_confirmacion timestamptz,
     fecha_confirmacion timestamptz,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
     constraint invitados_cupos_chk check (cupos >= 1),
-    constraint invitados_cantidad_confirmada_chk check (cantidad_confirmada >= 0 and cantidad_confirmada <= cupos)
+    constraint invitados_cantidad_confirmada_chk check (cantidad_confirmada >= 0 and cantidad_confirmada <= cupos),
+    constraint invitados_civil_cantidad_confirmada_chk check (civil_cantidad_confirmada >= 0 and civil_cantidad_confirmada <= cupos)
 );
 
 create unique index if not exists invitados_token_uidx
