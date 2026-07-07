@@ -23,7 +23,7 @@ function bindAdminEvents() {
 
 async function loadGuests() {
     const tbody = document.getElementById('adminTableBody');
-    tbody.innerHTML = `<tr><td colspan="17" class="empty-row">Cargando invitados...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="16" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
         .from('v_invitados_admin')
@@ -32,7 +32,7 @@ async function loadGuests() {
 
     if (error) {
         console.error(error);
-        tbody.innerHTML = `<tr><td colspan="17" class="empty-row">Error cargando invitados</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="16" class="empty-row">Error cargando invitados</td></tr>`;
         return;
     }
 
@@ -61,6 +61,8 @@ function applyFilters() {
             matchCivil = guest.civil === true;
         } else if (civil === 'religiosa') {
             matchCivil = guest.civil === false || guest.civil === null;
+        } else if (civil === 'especial') {
+            matchCivil = guest.tipo_invitacion_especial != null;
         }
 
         return matchName && matchStatus && matchCivil;
@@ -72,25 +74,25 @@ function applyFilters() {
 
 function renderStats(guests) {
     const total = guests.length;
-    const confirmed = guests.filter(g => g.confirmado === true).length;
-    const pending = guests.filter(g => g.confirmado === false || g.confirmado === null).length;
+    const confirmed = guests.filter(g => g.confirmado === true || g.civil_confirmado === true).length;
+    const pending = guests.filter(g => (g.confirmado !== true) && (g.civil_confirmado !== true)).length;
     const confirmedPeople = guests.reduce((acc, guest) => {
-        return acc + Number(guest.cantidad_confirmada || 0);
+        return acc + Number(guest.cantidad_confirmada || 0) + Number(guest.civil_cantidad_confirmada || 0);
     }, 0);
-    const civilCount = guests.filter(g => g.civil === true).length;
+    const civilConfirmed = guests.filter(g => g.civil_confirmado === true).length;
 
     document.getElementById('statTotal').textContent = total;
     document.getElementById('statConfirmed').textContent = confirmed;
     document.getElementById('statPending').textContent = pending;
     document.getElementById('statConfirmedPeople').textContent = confirmedPeople;
-    document.getElementById('statCivil').textContent = civilCount;
+    document.getElementById('statCivil').textContent = civilConfirmed;
 }
 
 function renderTable(guests) {
     const tbody = document.getElementById('adminTableBody');
 
     if (!guests.length) {
-        tbody.innerHTML = `<tr><td colspan="17" class="empty-row">No hay invitados para mostrar</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="16" class="empty-row">No hay invitados para mostrar</td></tr>`;
         return;
     }
 
@@ -135,28 +137,26 @@ function renderTable(guests) {
                 <td>${guest.civil_cantidad_confirmada ?? ''}</td>
                 <td>${especialBadge}</td>
                 <td>${especialAceptadaBadge}</td>
-                <td class="token-cell">${guest.token}</td>
                 <td class="link-cell">
-                    <a href="${link}" target="_blank">${link}</a>
+                    <button class="action-btn action-sm" onclick="copyText('${escapeForJs(link)}')">Copiar</button>
+                    <button class="action-btn action-sm primary" onclick="window.open('${escapeForJs(link)}', '_blank')">Abrir</button>
                 </td>
                 <td class="link-cell">
-                    ${guest.civil ? `<a href="${civilLink}" target="_blank">${civilLink}</a>` : '—'}
+                    ${guest.civil
+                        ? `<button class="action-btn action-sm" onclick="copyText('${escapeForJs(civilLink)}')">Copiar</button>
+                           <button class="action-btn action-sm primary" onclick="window.open('${escapeForJs(civilLink)}', '_blank')">Abrir</button>`
+                        : '—'}
                 </td>
                 <td class="link-cell">
-                    ${guest.tipo_invitacion_especial ? `<a href="${especialLink}" target="_blank">${especialLink}</a>` : '—'}
+                    ${guest.tipo_invitacion_especial
+                        ? `<button class="action-btn action-sm" onclick="copyText('${escapeForJs(especialLink)}')">Copiar</button>
+                           <button class="action-btn action-sm primary" onclick="window.open('${escapeForJs(especialLink)}', '_blank')">Abrir</button>`
+                        : '—'}
                 </td>
                 <td class="message-cell">${escapeHtml(guest.mensaje || '')}</td>
                 <td>${formatDate(guest.fecha_confirmacion)}</td>
                 <td>${formatDate(guest.civil_fecha_confirmacion)}</td>
-                <td>
-                    <div class="row-actions">
-                        <button class="action-btn" onclick="copyText('${guest.token}')">Copiar token</button>
-                        <button class="action-btn primary" onclick="copyText('${escapeForJs(link)}')">Copiar link</button>
-                        <button class="action-btn ${guest.civil ? 'primary' : ''}" onclick="copyText('${escapeForJs(civilLink)}')">Copiar civil</button>
-                        <button class="action-btn" onclick="copyText('${escapeForJs(especialLink)}')">Copiar esp.</button>
-                        <button class="action-btn" onclick="window.open('${escapeForJs(link)}', '_blank')">Abrir</button>
-                    </div>
-                </td>
+                <td></td>
             </tr>
         `;
     }).join('');
