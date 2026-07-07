@@ -4,6 +4,7 @@ const ROLE_CONFIG = {
     Cantante: { icon: '🎤', color: 'var(--gold)' },
     Fotografo: { icon: '📷', color: 'var(--navy-light)' },
     Pastor: { icon: '⛪', color: 'var(--navy)' },
+    'Wedding Planner': { icon: '📋', color: 'var(--gold)' },
 };
 
 let currentGuest = null;
@@ -83,6 +84,7 @@ function renderRoleInfo(guest) {
         'Cantante': `${guest.nombre_apellido}, tu voz hará que nuestra ceremonia sea aún más mágica.`,
         'Fotografo': `${guest.nombre_apellido}, confiamos en tu talento para capturar cada momento especial de nuestra boda.`,
         'Pastor': `${guest.nombre_apellido}, confiamos en tu guía espiritual para bendecir nuestra unión y hacer de este momento algo sagrado.`,
+        'Wedding Planner': `${guest.nombre_apellido}, gracias por ayudarnos a planificar y coordinar cada detalle de este día tan especial.`,
     };
     especialSaludo.textContent = saludos[role] || `${guest.nombre_apellido}, tenemos un lugar especial para ti.`;
 
