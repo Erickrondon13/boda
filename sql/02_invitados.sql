@@ -36,5 +36,5 @@ insert into public.invitados (nombre_apellido, cupos) values
 
 
 
-insert into public.invitados (nombre_apellido, cupos, tipo_invitacion_especial) values  
-('Daniel Ospina', 1, 'Pastor');
+insert into public.invitados (nombre_apellido, cupos, tipo_invitacion_especial, invitacion_especial_aceptada) values  
+('Salomé Sánchez Contreras', 1,'Dama de Honor', null);
