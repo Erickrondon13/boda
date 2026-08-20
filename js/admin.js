@@ -60,9 +60,15 @@ function applyFilters() {
 }
 
 function renderStats(guests) {
-    const total = guests.length;
-    const confirmed = guests.filter(g => g.confirmado === true).length;
-    const pending = guests.filter(g => g.confirmado !== true).length;
+    const total = guests.reduce((acc, guest) => {
+        return acc + Number(guest.cupos || 0);
+    }, 0);
+    const confirmed = guests.reduce((acc, guest) => {
+        return acc + Number(guest.cantidad_confirmada || 0);
+    }, 0);
+    const pending = guests.reduce((acc, guest) => {
+        return acc + Number(guest.cupos || 0) - Number(guest.cantidad_confirmada || 0);
+    }, 0);
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
