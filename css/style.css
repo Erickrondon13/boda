@@ -188,7 +188,7 @@ body {
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--navy-medium);
+    color: var(--muted);
 }
 
 /* ───── CARDS ───── */
