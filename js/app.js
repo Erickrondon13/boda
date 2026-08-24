@@ -9,6 +9,7 @@ setupInvitacion({
             .update({
                 confirmado: asiste,
                 cantidad_confirmada: cantidad,
+                mensaje: message || null,
                 fecha_confirmacion: new Date().toISOString()
             })
             .eq('id', guest.id)
