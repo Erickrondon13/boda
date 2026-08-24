@@ -17,6 +17,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
 
@@ -41,7 +42,7 @@
         <!-- HERO -->
         <section class="hero">
             <div class="hero-overlay"></div>
-            <img src="assets/banner.jpeg" alt="Erick y Telma" class="hero-image" />
+            <img src="assets/banner.jpeg" alt="Erick y Telma" class="hero-image" decoding="async" />
             <div class="hero-content">
                 <p class="hero-kicker">Una historia escrita por Dios</p>
                 <h1>Erick <span>&</span> Telma</h1>
@@ -64,7 +65,7 @@
             <p class="intro-date">15 de noviembre de 2026</p>
 
             <figure class="invite-photo">
-                <img src="assets/novios-carrying.jpeg" alt="Erick cargando a Telma, ella mirándolo a la cara" />
+                <img src="assets/novios-carrying.jpeg" alt="Erick cargando a Telma, ella mirándolo a la cara" loading="lazy" decoding="async" />
                 <figcaption>Y sin importar el peso, contigo en brazos todo es liviano</figcaption>
             </figure>
 
@@ -150,7 +151,7 @@
             </div>
 
             <figure class="invite-photo">
-                <img src="assets/novios-frente.jpeg" alt="Erick de pie frente a Telma" />
+                <img src="assets/novios-frente.jpeg" alt="Erick de pie frente a Telma" loading="lazy" decoding="async" />
                 <figcaption>Frente a frente, listos para decir que sí</figcaption>
             </figure>
         </section>
@@ -197,11 +198,6 @@
             <h2>Código de Vestimenta</h2>
             <p class="dress-intro"> Queremos que todos luzcan increíbles mientras celebramos juntos. </p>
             <div class="dress-grid">
-            <!--div class="dress-box">
-                    <div class="dress-icon">👰</div>
-                    <div class="dress-text">Novia</div>
-                    <div class="dress-colors">Blanco + Azul Marino</div>
-                </div-->
                 <div class="dress-box">
                     <div class="dress-icon">🤵</div>
                     <div class="dress-text">Novio</div>
@@ -266,7 +262,6 @@
                 </div>
 
                 <div id="rsvpBox" class="rsvp-box hidden">
-                    <!--h3>RSVP</h3-->
                     <p class="rsvp-help">
                         Por favor confirma tu asistencia.
                     </p>
@@ -314,7 +309,7 @@
         </section>
     </main>
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="none">
         <source src="assets/base.webm" type="audio/webm" />
     </audio>
 
