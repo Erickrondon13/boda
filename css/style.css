@@ -306,19 +306,29 @@ body {
     margin: 0;
     text-align: center;
     font-family: var(--font-title);
-    font-size: var(--fs-subtitle);
+    font-size: 1.9rem;
     font-weight: 600;
     color: var(--navy);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
+}
+
+.invite-from {
+    margin-bottom: 4px;
 }
 
 .intro-invite {
-    margin: 20px 0 16px;
+    margin: 12px 0 0;
     text-align: center;
     font-size: 1rem;
-    font-weight: 300;
+    font-weight: 400;
     color: var(--text);
     font-style: italic;
+}
+
+.intro-event {
+    margin-top: 26px;
+    padding-top: 26px;
+    border-top: 1px solid var(--border);
 }
 
 .intro-couple {
