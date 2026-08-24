@@ -3,7 +3,7 @@
     --bg-soft: #fcfaf7;
     --card: rgba(255, 255, 255, 0.95);
     --text: #2c2c2c;
-    --muted: #7a7a7a;
+    --muted: #6a6a6a;
     --navy: #1a2744;
     --navy-medium: #2a3f6a;
     --navy-light: #3d5a80;
@@ -148,7 +148,7 @@ body {
     text-align: center;
     margin: 18px 0 6px;
     font-size: 1.4rem;
-    color: var(--mint-light);
+    color: var(--mint-dark);
     letter-spacing: 0.3em;
 }
 
@@ -359,7 +359,7 @@ body {
     text-align: center;
     font-size: 1rem;
     font-weight: 400;
-    color: var(--text);
+    color: var(--muted);
     font-style: italic;
 }
 
