@@ -1,10 +1,15 @@
 (function initCountdown() {
-    const targetDate = new Date('2026-11-15T16:00:00-05:00').getTime();
+    var container = document.getElementById('countdown');
+    if (!container) return;
 
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
+    var targetDate = new Date(
+        container.dataset.target || '2026-11-15T16:00:00-05:00'
+    ).getTime();
+
+    var daysEl = document.getElementById('days');
+    var hoursEl = document.getElementById('hours');
+    var minutesEl = document.getElementById('minutes');
+    var secondsEl = document.getElementById('seconds');
 
     if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
         return;
@@ -15,8 +20,8 @@
     }
 
     function updateCountdown() {
-        const now = Date.now();
-        const diff = targetDate - now;
+        var now = Date.now();
+        var diff = targetDate - now;
 
         if (diff <= 0) {
             daysEl.textContent = '00';
@@ -26,11 +31,11 @@
             return;
         }
 
-        const totalSeconds = Math.floor(diff / 1000);
-        const days = Math.floor(totalSeconds / (60 * 60 * 24));
-        const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
-        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
-        const seconds = totalSeconds % 60;
+        var totalSeconds = Math.floor(diff / 1000);
+        var days = Math.floor(totalSeconds / (60 * 60 * 24));
+        var hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+        var minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+        var seconds = totalSeconds % 60;
 
         daysEl.textContent = pad(days);
         hoursEl.textContent = pad(hours);

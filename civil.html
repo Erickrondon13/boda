@@ -41,7 +41,7 @@
         <!-- HERO -->
         <section class="hero">
             <div class="hero-overlay"></div>
-            <img src="assets/banner.jpeg" alt="Erick y Telma" class="hero-image" />
+            <img src="assets/banner.jpeg" alt="Erick y Telma" class="hero-image" width="1600" height="900" decoding="async" />
             <div class="hero-content">
                 <p class="hero-kicker">Boda Civil</p>
                 <h1>Erick <span>&</span> Telma</h1>
@@ -63,7 +63,7 @@
         <!-- COUNTDOWN -->
         <section class="card countdown-card">
             <h2>Cuenta regresiva</h2>
-            <div id="countdown" class="countdown">
+            <div id="countdown" class="countdown" data-target="2026-07-12T15:00:00-05:00">
                 <div class="count-box">
                     <span id="days">00</span>
                     <small>Días</small>
@@ -145,14 +145,6 @@
                     Hemos reservado <strong id="guestSlots">0</strong> lugares para ustedes en nuestra boda civil.
                 </p>
 
-                <div id="alreadyConfirmedBox" class="already-confirmed hidden">
-                    <h3>💌 ¡Confirmación Recibida!</h3>
-                    <p>
-                        ¡Qué alegría! Ya contamos contigo para la boda civil.
-                    </p>
-                    <p class="signature">Erick Rondón & Telma Verónica</p>
-                </div>
-
                 <div id="rsvpBox" class="rsvp-box hidden">
                     <p class="rsvp-help">
                         Por favor confirma tu asistencia a la boda civil.
@@ -188,11 +180,9 @@
                     </form>
                 </div>
 
-                <div id="successBox" class="success-box hidden">
+                <div id="confirmationBox" class="success-box hidden">
                     <h3>💌 ¡Confirmación Recibida!</h3>
-                    <p>
-                        ¡Qué alegría! Ya contamos contigo para la boda civil.
-                    </p>
+                    <p>¡Qué alegría! Ya contamos contigo para la boda civil.</p>
                     <p class="signature">Erick Rondón & Telma Verónica</p>
                 </div>
 
@@ -201,65 +191,17 @@
         </section>
     </main>
 
-    <audio id="bgMusic" loop preload="auto">
+    <audio id="bgMusic" loop preload="none">
         <source src="assets/base.webm" type="audio/webm" />
+        <source src="assets/base.mp3" type="audio/mpeg" />
     </audio>
 
     <button class="music-btn" id="musicBtn" title="Play / Pause">♪</button>
 
     <script src="js/supabase.js"></script>
-    <script src="js/countdown-civil.js"></script>
+    <script src="js/countdown.js"></script>
+    <script src="js/rsvp.js"></script>
     <script src="js/civil.js"></script>
-
-    <script>
-        (function() {
-            var overlay = document.getElementById('letterOverlay');
-            var nameEl = document.getElementById('letterGuestName');
-            var audio = document.getElementById('bgMusic');
-            var musicBtn = document.getElementById('musicBtn');
-            var isPlaying = false;
-
-            function toggleMusic() {
-                if (isPlaying) {
-                    audio.pause();
-                    musicBtn.classList.remove('playing');
-                } else {
-                    audio.play().then(function() {
-                        musicBtn.classList.add('playing');
-                    }).catch(function() {});
-                }
-                isPlaying = !isPlaying;
-            }
-
-            musicBtn?.addEventListener('click', toggleMusic);
-
-            overlay?.addEventListener('click', function() {
-                this.classList.add('hidden');
-                if (audio) {
-                    audio.play().then(function() {
-                        isPlaying = true;
-                        if (musicBtn) musicBtn.classList.add('playing');
-                    }).catch(function() {});
-                }
-            });
-
-            var params = new URLSearchParams(window.location.search);
-            var token = params.get('token') || params.get('id');
-
-            if (token && nameEl) {
-                supabaseClient
-                    .from('invitados')
-                    .select('nombre_apellido')
-                    .eq('token', token)
-                    .single()
-                    .then(function(res) {
-                        if (res.data && res.data.nombre_apellido) {
-                            nameEl.textContent = res.data.nombre_apellido;
-                        }
-                    })
-                    .catch(function() {});
-            }
-        })();
-    </script>
+    <script src="js/overlay.js"></script>
 </body>
 </html>

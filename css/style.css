@@ -236,6 +236,16 @@ body {
     margin-bottom: 12px;
 }
 
+.intro-text {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    line-height: 2;
+    font-size: var(--fs-body);
+    font-weight: 300;
+    color: var(--text);
+}
+
 /* ───── FOTOS INTEGRADAS EN LA INVITACIÓN ───── */
 
 .invite-photo {

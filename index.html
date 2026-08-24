@@ -76,7 +76,7 @@
         <!-- COUNTDOWN -->
         <section class="card countdown-card">
             <h2>Cuenta regresiva</h2>
-            <div id="countdown" class="countdown">
+            <div id="countdown" class="countdown" data-target="2026-11-15T16:00:00-05:00">
                 <div class="count-box">
                     <span id="days">00</span>
                     <small>Días</small>
@@ -100,11 +100,11 @@
         <section class="card location-card">
             <p class="place-kicker">Dónde celebraremos</p>
             <div class="place-pin">📍</div>
-            <p class="place-name">Salsipuedes</p>
+            <p class="place-name">Casa Museo Salsipuedes</p>
             <p class="place-desc">Un lugar especial para comenzar esta nueva etapa juntos.</p>
             <a
                 class="btn btn-primary"
-                href="https://www.google.com/maps/search/?api=1&query=Salsipuedes"
+                href="https://www.google.com/maps/search/?api=1&query=Casa+Museo+Salsipuedes"
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -311,57 +311,8 @@
 
     <script src="js/supabase.js"></script>
     <script src="js/countdown.js"></script>
+    <script src="js/rsvp.js"></script>
     <script src="js/app.js"></script>
-
-    <script>
-        (function() {
-            var overlay = document.getElementById('letterOverlay');
-            var nameEl = document.getElementById('letterGuestName');
-            var audio = document.getElementById('bgMusic');
-            var musicBtn = document.getElementById('musicBtn');
-            var isPlaying = false;
-
-            function toggleMusic() {
-                if (isPlaying) {
-                    audio.pause();
-                    musicBtn.classList.remove('playing');
-                } else {
-                    audio.play().then(function() {
-                        musicBtn.classList.add('playing');
-                    }).catch(function() {});
-                }
-                isPlaying = !isPlaying;
-            }
-
-            musicBtn?.addEventListener('click', toggleMusic);
-
-            overlay?.addEventListener('click', function() {
-                this.classList.add('hidden');
-                if (audio) {
-                    audio.play().then(function() {
-                        isPlaying = true;
-                        if (musicBtn) musicBtn.classList.add('playing');
-                    }).catch(function() {});
-                }
-            });
-
-            var params = new URLSearchParams(window.location.search);
-            var token = params.get('token') || params.get('id');
-
-            if (token && nameEl) {
-                supabaseClient
-                    .from('invitados')
-                    .select('nombre_apellido')
-                    .eq('token', token)
-                    .single()
-                    .then(function(res) {
-                        if (res.data && res.data.nombre_apellido) {
-                            nameEl.textContent = res.data.nombre_apellido;
-                        }
-                    })
-                    .catch(function() {});
-            }
-        })();
-    </script>
+    <script src="js/overlay.js"></script>
 </body>
 </html>
