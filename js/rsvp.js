@@ -68,7 +68,7 @@ function setupInvitacion(options) {
 
         guestIntro.textContent =
             guest.nombre_apellido + ', estamos muy felices de que nos acompañes en este día tan especial.';
-        guestIntro.classList.remove('hidden');
+        //guestIntro.classList.remove('hidden');
 
         fillConfirmedCountOptions(confirmedCount, guest.cupos);
 
