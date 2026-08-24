@@ -258,6 +258,7 @@ body {
 .invite-photo img {
     width: 100%;
     height: 380px;
+    aspect-ratio: 460 / 380;
     object-fit: cover;
     object-position: var(--photo-pos);
     display: block;
@@ -723,7 +724,6 @@ body {
 }
 
 .rsvp-box,
-.already-confirmed,
 .success-box {
     margin-top: 20px;
     background: #fff;
@@ -734,14 +734,12 @@ body {
 }
 
 .rsvp-box:hover,
-.already-confirmed:hover,
 .success-box:hover {
     border-color: var(--mint-light);
     box-shadow: 0 8px 25px rgba(184, 212, 199, 0.10);
 }
 
 .rsvp-box h3,
-.already-confirmed h3,
 .success-box h3 {
     margin-top: 0;
     color: var(--navy);
@@ -1085,4 +1083,32 @@ body {
 @keyframes letterPulse {
     0%, 100% { transform: scale(1); filter: drop-shadow(0 2px 8px rgba(184, 212, 199, 0.3)); }
     50% { transform: scale(1.08); filter: drop-shadow(0 4px 16px rgba(184, 212, 199, 0.5)); }
+}
+
+/* ───── ACCESIBILIDAD: REDUCIR MOVIMIENTO ───── */
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+
+    .letter-card {
+        animation: none;
+    }
+
+    .letter-seal {
+        animation: none;
+    }
+
+    .music-btn.playing {
+        animation: none;
+    }
 }

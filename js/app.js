@@ -55,7 +55,7 @@ async function fetchGuest(token) {
 function renderGuestInfo(guest) {
     const guestNameEl = document.getElementById('guestName');
     const guestSlotsEl = document.getElementById('guestSlots');
-    const alreadyConfirmedBox = document.getElementById('alreadyConfirmedBox');
+    const confirmationBox = document.getElementById('confirmationBox');
     const rsvpBox = document.getElementById('rsvpBox');
     const confirmedCount = document.getElementById('confirmedCount');
     const companionsGroup = document.getElementById('companionsGroup');
@@ -85,10 +85,10 @@ function renderGuestInfo(guest) {
     companionsGroup.classList.add('hidden');
 
     if (guest.confirmado) {
-        alreadyConfirmedBox.classList.remove('hidden');
+        confirmationBox.classList.remove('hidden');
         rsvpBox.classList.add('hidden');
     } else {
-        alreadyConfirmedBox.classList.add('hidden');
+        confirmationBox.classList.add('hidden');
         rsvpBox.classList.remove('hidden');
     }
 }
@@ -158,10 +158,8 @@ function bindRsvpForm(guest) {
 }
 
 function showSuccess() {
-    const successBox = document.getElementById('successBox');
-    const alreadyConfirmedBox = document.getElementById('alreadyConfirmedBox');
-    successBox.classList.remove('hidden');
-    alreadyConfirmedBox.classList.add('hidden');
+    const confirmationBox = document.getElementById('confirmationBox');
+    confirmationBox.classList.remove('hidden');
 }
 
 function showError(message) {
