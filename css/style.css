@@ -144,6 +144,14 @@ body {
     backdrop-filter: blur(4px);
 }
 
+.hero-divider {
+    text-align: center;
+    margin: 18px 0 6px;
+    font-size: 1.4rem;
+    color: var(--mint-light);
+    letter-spacing: 0.3em;
+}
+
 .hero-guest {
     margin: 18px 0 0;
     font-size: 1.35rem;
@@ -151,6 +159,25 @@ body {
     opacity: 0.95;
     font-family: var(--font-title);
     letter-spacing: 0.04em;
+}
+
+/* ───── DIVISORES Y SALUDO DE INVITACIÓN ───── */
+
+.invite-divider {
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--mint-dark);
+    margin: 30px 0 18px;
+}
+
+.invite-welcome {
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.02em;
 }
 
 /* ───── CARDS ───── */
@@ -323,36 +350,6 @@ body {
     font-weight: 400;
     color: var(--text);
     font-style: italic;
-}
-
-.intro-event {
-    margin-top: 26px;
-    padding-top: 26px;
-    border-top: 1px solid var(--border);
-}
-
-.intro-couple {
-    margin: 8px 0 14px;
-    font-family: var(--font-title);
-    font-size: 3.1rem;
-    font-weight: 700;
-    color: var(--navy);
-    text-align: center;
-    letter-spacing: 0.02em;
-}
-
-.intro-couple span {
-    color: var(--mint-dark);
-    font-weight: 400;
-}
-
-.intro-date {
-    margin: 0 0 42px;
-    text-align: center;
-    font-size: 1.05rem;
-    letter-spacing: 0.12em;
-    font-weight: 600;
-    color: var(--navy-medium);
 }
 
 .intro-guest {

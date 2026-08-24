@@ -66,9 +66,10 @@ function setupInvitacion(options) {
         guestWelcome.textContent = welcomeText(guest);
         guestWelcome.classList.remove('hidden');
 
-        guestIntro.textContent =
-            guest.nombre_apellido + ', estamos muy felices de que nos acompañes en este día tan especial.';
-        //guestIntro.classList.remove('hidden');
+        if (guestIntro) {
+            guestIntro.textContent =
+                guest.nombre_apellido + ', estamos muy felices de que nos acompañes en este día tan especial.';
+        }
 
         fillConfirmedCountOptions(confirmedCount, guest.cupos);
 
