@@ -4,12 +4,15 @@ setupInvitacion({
         return 'Te invitamos, ' + g.nombre_apellido;
     },
     save: function (guest, asiste, cantidad, message) {
+        var base = guest.mensaje || '';
+        var finalMsg = message ? (base ? base + '\n' + message : message) : base;
+
         return supabaseClient
             .from('invitados')
             .update({
                 confirmado: asiste,
                 cantidad_confirmada: cantidad,
-                mensaje: message || null,
+                mensaje: finalMsg || null,
                 fecha_confirmacion: new Date().toISOString()
             })
             .eq('id', guest.id)
