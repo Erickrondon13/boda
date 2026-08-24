@@ -16,7 +16,7 @@ create table if not exists public.invitados (
     fecha_confirmacion timestamptz,
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now(),
-    constraint invitados_cupos_chk check (cupos >= 1),
+    constraint invitados_cupos_chk check (cupos >= 0),
     constraint invitados_cantidad_confirmada_chk check (cantidad_confirmada >= 0 and cantidad_confirmada <= cupos),
     constraint invitados_civil_cantidad_confirmada_chk check (civil_cantidad_confirmada >= 0 and civil_cantidad_confirmada <= cupos)
 );

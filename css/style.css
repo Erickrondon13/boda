@@ -239,12 +239,172 @@ body {
     color: var(--text);
 }
 
+/* ───── FOTOS INTEGRADAS EN LA INVITACIÓN ───── */
+
+.invite-photo {
+    --photo-pos: center 30%;
+    margin: 26px auto 4px;
+    max-width: 460px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 30px rgba(26, 39, 68, 0.12);
+    background: #fff;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.invite-photo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 38px rgba(26, 39, 68, 0.18);
+}
+
+.invite-photo img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    object-position: var(--photo-pos);
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.invite-photo:hover img {
+    transform: scale(1.05);
+}
+
+.invite-photo figcaption {
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 400;
+    font-family: var(--font-title);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* ───── INVITACIÓN TRADICIONAL ───── */
+
+.intro-pre {
+    margin: 0 auto 22px;
+    text-align: center;
+    max-width: 620px;
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+}
+
+.intro-parents {
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-title);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+}
+
+.intro-invite {
+    margin: 6px 0 14px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--text);
+    font-style: italic;
+}
+
+.intro-couple {
+    margin: 0 0 14px;
+    font-family: var(--font-title);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--navy);
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.intro-couple span {
+    color: var(--mint-dark);
+    font-weight: 400;
+}
+
+.intro-date {
+    margin: 0;
+    text-align: center;
+    font-size: 1.05rem;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    color: var(--navy-medium);
+}
+
 .intro-guest {
     margin: 16px 50px 0;
     font-style: italic;
     color: var(--muted);
     font-weight: 900;
     text-align: center;
+}
+
+/* ───── RECOMENDACIONES ───── */
+
+.tips-sub {
+    text-align: center;
+    color: var(--muted);
+    font-weight: 300;
+    margin: -10px 0 22px;
+    font-size: 0.95rem;
+}
+
+.tips-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.tips-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tips-list li:hover {
+    transform: translateY(-3px);
+    border-color: var(--mint);
+    box-shadow: 0 8px 25px rgba(184, 212, 199, 0.18);
+}
+
+.tips-icon {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+.tips-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.tips-body strong {
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.tips-body span {
+    color: var(--muted);
+    font-weight: 300;
+    font-size: 0.88rem;
+    line-height: 1.5;
 }
 
 /* ───── COUNTDOWN ───── */
@@ -646,6 +806,14 @@ body {
 
     .card h2 {
         font-size: 1.8rem;
+    }
+
+    .invite-photo img {
+        height: 300px;
+    }
+
+    .intro-couple {
+        font-size: 2.2rem;
     }
 
     .countdown {
