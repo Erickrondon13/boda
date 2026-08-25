@@ -32,7 +32,8 @@ insert into public.invitados (nombre_apellido, cupos) values
 
 
 insert into public.invitados (nombre_apellido, cupos) values 
-('Familia Molina Gomez', 4);
+('Daniel Zapata', 1),
+('Emanuel Usme Casas', 1);
 
 
 
