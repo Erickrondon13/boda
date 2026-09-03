@@ -51,7 +51,7 @@ function applyFilters() {
         } else if (status === 'pending') {
             matchStatus = guest.confirmado === false || guest.confirmado === null;
         } else if (status === 'rejected') {
-            matchStatus = guest.estado === 'rechazado';
+            matchStatus = guest.confirmado === false && guest.fecha_confirmacion != null;
         }
 
         return matchName && matchStatus;
@@ -65,13 +65,11 @@ function renderStats(guests) {
     const total = guests.reduce((acc, guest) => {
         return acc + Number(guest.cupos || 0);
     }, 0);
-    const confirmed = guests.reduce((acc, guest) => {
-        return acc + Number(guest.cantidad_confirmada || 0);
-    }, 0);
+    const confirmed = guests.filter(guest => guest.confirmado === true).length;
     const pending = guests.reduce((acc, guest) => {
         return acc + Number(guest.cupos || 0) - Number(guest.cantidad_confirmada || 0);
     }, 0);
-    const rejected = guests.filter(guest => guest.estado === 'rechazado').length;
+    const rejected = guests.filter(guest => guest.confirmado === false && guest.fecha_confirmacion != null).length;
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
@@ -111,9 +109,9 @@ function renderTable(guests) {
         return `
             <tr>
                 <td>${escapeHtml(guest.nombre_apellido)}</td>
-                <td>${guest.estado === 'confirmado'
+                <td>${(guest.confirmado === true)
                     ? `<span class="badge badge-confirmed">Sí</span>`
-                    : guest.estado === 'rechazado'
+                    : (guest.fecha_confirmacion != null)
                     ? `<span class="badge badge-rejected">No</span>`
                     : `<span class="badge badge-pending">Pendiente</span>`}</td>
                 <td>${guest.cupos ?? ''}</td>
