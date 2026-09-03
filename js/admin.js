@@ -47,9 +47,11 @@ function applyFilters() {
 
         let matchStatus = true;
         if (status === 'confirmed') {
-            matchStatus = guest.confirmado === true;
+            matchStatus = guest.estado === 'confirmado';
         } else if (status === 'pending') {
-            matchStatus = guest.confirmado === false || guest.confirmado === null;
+            matchStatus = guest.estado === 'pendiente';
+        } else if (status === 'rejected') {
+            matchStatus = guest.estado === 'rechazado';
         }
 
         return matchName && matchStatus;
@@ -66,9 +68,8 @@ function renderStats(guests) {
     const confirmed = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
-    const pending = guests.reduce((acc, guest) => {
-        return acc + Number(guest.cupos || 0) - Number(guest.cantidad_confirmada || 0);
-    }, 0);
+    const pending = guests.filter(guest => guest.estado === 'pendiente').length;
+    const rejected = guests.filter(guest => guest.estado === 'rechazado').length;
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
@@ -76,6 +77,7 @@ function renderStats(guests) {
     document.getElementById('statTotal').textContent = total;
     document.getElementById('statConfirmed').textContent = confirmed;
     document.getElementById('statPending').textContent = pending;
+    document.getElementById('statRejected').textContent = rejected;
     document.getElementById('statConfirmedPeople').textContent = confirmedPeople;
 }
 
@@ -88,9 +90,9 @@ function renderTable(guests) {
     }
 
     tbody.innerHTML = guests.map(guest => {
-        const statusBadge = guest.confirmado === true
+        const statusBadge = guest.estado === 'confirmado'
             ? `<span class="badge badge-confirmed">Sí</span>`
-            : guest.confirmado === false
+            : guest.estado === 'rechazado'
             ? `<span class="badge badge-rejected">No</span>`
             : `<span class="badge badge-pending">Pendiente</span>`;
 
@@ -189,7 +191,7 @@ function exportGuestsCsv() {
         return [
             csvValue(guest.nombre_apellido),
             csvValue(guest.cupos),
-            csvValue(guest.confirmado === true ? 'Sí' : guest.confirmado === false ? 'No' : 'Pendiente'),
+            csvValue(guest.estado === 'confirmado' ? 'Sí' : guest.estado === 'rechazado' ? 'No' : 'Pendiente'),
             csvValue(guest.cantidad_confirmada ?? ''),
             csvValue(guest.token),
             csvValue(link),
