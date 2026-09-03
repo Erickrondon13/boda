@@ -20,7 +20,7 @@ function bindAdminEvents() {
 
 async function loadGuests() {
     const tbody = document.getElementById('adminTableBody');
-    tbody.innerHTML = `<tr><td colspan="11" class="empty-row">Cargando invitados...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
         .from('v_invitados_admin')
@@ -29,7 +29,7 @@ async function loadGuests() {
 
     if (error) {
         console.error(error);
-        tbody.innerHTML = `<tr><td colspan="11" class="empty-row">Error cargando invitados</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Error cargando invitados</td></tr>`;
         return;
     }
 
@@ -87,7 +87,7 @@ function renderTable(guests) {
     const tbody = document.getElementById('adminTableBody');
 
     if (!guests.length) {
-        tbody.innerHTML = `<tr><td colspan="11" class="empty-row">No hay invitados para mostrar</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">No hay invitados para mostrar</td></tr>`;
         return;
     }
 
@@ -117,6 +117,9 @@ function renderTable(guests) {
         return `
             <tr>
                 <td>${escapeHtml(guest.nombre_apellido)}</td>
+                <td>${guest.confirmado === true
+                    ? `<span class="badge badge-confirmed">Sí</span>`
+                    : `<span class="badge badge-rejected">No</span>`}</td>
                 <td>${guest.cupos ?? ''}</td>
                 <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
