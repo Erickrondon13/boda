@@ -117,9 +117,11 @@ function renderTable(guests) {
         return `
             <tr>
                 <td>${escapeHtml(guest.nombre_apellido)}</td>
-                <td>${guest.confirmado === true
+                <td>${guest.estado === 'confirmado'
                     ? `<span class="badge badge-confirmed">Sí</span>`
-                    : `<span class="badge badge-rejected">No</span>`}</td>
+                    : guest.estado === 'rechazado'
+                    ? `<span class="badge badge-rejected">No</span>`
+                    : `<span class="badge badge-pending">Pendiente</span>`}</td>
                 <td>${guest.cupos ?? ''}</td>
                 <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
