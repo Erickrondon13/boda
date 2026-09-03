@@ -20,7 +20,7 @@ function bindAdminEvents() {
 
 async function loadGuests() {
     const tbody = document.getElementById('adminTableBody');
-    tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Cargando invitados...</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11" class="empty-row">Cargando invitados...</td></tr>`;
 
     const { data, error } = await supabaseClient
         .from('v_invitados_admin')
@@ -29,7 +29,7 @@ async function loadGuests() {
 
     if (error) {
         console.error(error);
-        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">Error cargando invitados</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="empty-row">Error cargando invitados</td></tr>`;
         return;
     }
 
@@ -87,17 +87,11 @@ function renderTable(guests) {
     const tbody = document.getElementById('adminTableBody');
 
     if (!guests.length) {
-        tbody.innerHTML = `<tr><td colspan="12" class="empty-row">No hay invitados para mostrar</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="empty-row">No hay invitados para mostrar</td></tr>`;
         return;
     }
 
     tbody.innerHTML = guests.map(guest => {
-        const statusBadge = guest.estado === 'confirmado'
-            ? `<span class="badge badge-confirmed">Sí</span>`
-            : guest.estado === 'rechazado'
-            ? `<span class="badge badge-rejected">No</span>`
-            : `<span class="badge badge-pending">Pendiente</span>`;
-
         const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
 
         const especialBadge = guest.tipo_invitacion_especial
@@ -123,7 +117,6 @@ function renderTable(guests) {
                     ? `<span class="badge badge-rejected">No</span>`
                     : `<span class="badge badge-pending">Pendiente</span>`}</td>
                 <td>${guest.cupos ?? ''}</td>
-                <td>${statusBadge}</td>
                 <td>${guest.cantidad_confirmada ?? ''}</td>
                 <td>${especialBadge}</td>
                 <td>${especialAceptadaBadge}</td>
