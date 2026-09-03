@@ -25,6 +25,7 @@ async function loadGuests() {
     const { data, error } = await supabaseClient
         .from('v_invitados_admin')
         .select('*')
+        .gt('cupos', 0)
         .order('nombre_apellido', { ascending: true });
 
     if (error) {
