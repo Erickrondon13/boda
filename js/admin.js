@@ -47,9 +47,9 @@ function applyFilters() {
 
         let matchStatus = true;
         if (status === 'confirmed') {
-            matchStatus = guest.estado === 'confirmado';
+            matchStatus = guest.confirmado === true;
         } else if (status === 'pending') {
-            matchStatus = guest.estado === 'pendiente';
+            matchStatus = guest.confirmado === false || guest.confirmado === null;
         } else if (status === 'rejected') {
             matchStatus = guest.estado === 'rechazado';
         }
@@ -68,7 +68,9 @@ function renderStats(guests) {
     const confirmed = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
     }, 0);
-    const pending = guests.filter(guest => guest.estado === 'pendiente').length;
+    const pending = guests.reduce((acc, guest) => {
+        return acc + Number(guest.cupos || 0) - Number(guest.cantidad_confirmada || 0);
+    }, 0);
     const rejected = guests.filter(guest => guest.estado === 'rechazado').length;
     const confirmedPeople = guests.reduce((acc, guest) => {
         return acc + Number(guest.cantidad_confirmada || 0);
