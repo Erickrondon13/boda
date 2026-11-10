@@ -38,12 +38,12 @@
     transform: translateX(-50%) translateY(0);
 }
 
-/* ───── Panel Comunidad en admin (consejos + galería) ───── */
-.comunidad-tabs {
+/* ───── Pestañas del admin (Invitaciones · Galería · Consejos) ───── */
+.admin-tabs {
     display: flex;
     gap: 12px;
     justify-content: center;
-    margin-bottom: 18px;
+    margin: 4px 0 24px;
     flex-wrap: wrap;
 }
 

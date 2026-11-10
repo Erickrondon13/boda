@@ -19,97 +19,104 @@
 
             <div class="admin-actions-top">
                 <a class="btn" href="comunidad.html">Comunidad (QR)</a>
-                <button class="btn" id="btnVerConsejos">Consejos y mensajes</button>
-                <button class="btn" id="btnVerGaleria">Galería</button>
                 <button class="btn" id="btnRefresh">Actualizar</button>
                 <button class="btn btn-primary" id="btnCopyAllLinks">Copiar todos los links</button>
                 <button class="btn" id="btnExportCsv">Exportar CSV</button>
             </div>
         </header>
 
-        <section class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-label">Invitados</span>
-                <strong id="statTotal">0</strong>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Personas confirmadas</span>
-                <strong id="statConfirmedPeople">0</strong>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Confirmados</span>
-                <strong id="statConfirmed">0</strong>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Pendientes</span>
-                <strong id="statPending">0</strong>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Rechazados</span>
-                <strong id="statRejected">0</strong>
-            </div>
+        <nav class="admin-tabs" id="adminTabs">
+            <button class="tab-btn active" type="button" data-tab="invitaciones">Invitaciones</button>
+            <button class="tab-btn" type="button" data-tab="galeria">Galería</button>
+            <button class="tab-btn" type="button" data-tab="consejos">Consejos</button>
+        </nav>
 
-        </section>
-
-        <section class="admin-card filters-card">
-            <div class="filters-row">
-                <div class="field">
-                    <label for="searchInput">Buscar</label>
-                    <input type="text" id="searchInput" placeholder="Buscar por nombre..." />
+        <div id="tabInvitaciones">
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Invitados</span>
+                    <strong id="statTotal">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Personas confirmadas</span>
+                    <strong id="statConfirmedPeople">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Confirmados</span>
+                    <strong id="statConfirmed">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Pendientes</span>
+                    <strong id="statPending">0</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Rechazados</span>
+                    <strong id="statRejected">0</strong>
                 </div>
 
-                <div class="field">
-                    <label for="statusFilter">Estado</label>
-                    <select id="statusFilter">
-                        <option value="all">Todos</option>
-                        <option value="confirmed">Confirmados</option>
-                        <option value="pending">Pendientes</option>
-                        <option value="rejected">Rechazados</option>
-                    </select>
+            </section>
+
+            <section class="admin-card filters-card">
+                <div class="filters-row">
+                    <div class="field">
+                        <label for="searchInput">Buscar</label>
+                        <input type="text" id="searchInput" placeholder="Buscar por nombre..." />
+                    </div>
+
+                    <div class="field">
+                        <label for="statusFilter">Estado</label>
+                        <select id="statusFilter">
+                            <option value="all">Todos</option>
+                            <option value="confirmed">Confirmados</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="rejected">Rechazados</option>
+                        </select>
+                    </div>
+
                 </div>
+            </section>
 
+            <section class="admin-card table-card">
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Invitado</th>
+                                <th>Confirmado</th>
+                                <th>Cupos</th>
+                                <th>Cantidad</th>
+                                <th>Invitación Especial</th>
+                                <th>Esp. Aceptada</th>
+                                <th>Link</th>
+                                <th>Link Especial</th>
+                                <th>Mensaje</th>
+                                <th>Fecha confirmación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                            <tr>
+                                <td colspan="12">Cargando invitados...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <section class="admin-card hidden" id="tabGaleria">
+            <h2>Galería</h2>
+            <div id="adminGaleriaWrap" class="comunidad-tab-content">
+                <p class="guest-loading">Cargando recuerdos...</p>
             </div>
         </section>
 
-        <section class="admin-card table-card">
-            <div class="table-wrapper">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Invitado</th>
-                            <th>Confirmado</th>
-                            <th>Cupos</th>
-                            <th>Cantidad</th>
-                            <th>Invitación Especial</th>
-                            <th>Esp. Aceptada</th>
-                            <th>Link</th>
-                            <th>Link Especial</th>
-                            <th>Mensaje</th>
-                            <th>Fecha confirmación</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminTableBody">
-                        <tr>
-                            <td colspan="12">Cargando invitados...</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <section class="admin-card hidden" id="tabConsejos">
+            <h2>Consejos y mensajes</h2>
+            <div id="adminConsejosWrap" class="comunidad-tab-content">
+                <p class="guest-loading">Cargando mensajes...</p>
             </div>
         </section>
-    <section class="admin-card hidden" id="comunidadPanel">
-        <h2>Comunidad</h2>
-        <div class="comunidad-tabs">
-            <button class="btn tab-btn active" id="tabConsejos" type="button">Consejos y mensajes</button>
-            <button class="btn tab-btn" id="tabGaleria" type="button">Galería</button>
-        </div>
-        <div id="adminConsejosWrap" class="comunidad-tab-content hidden">
-            <p class="guest-loading">Cargando mensajes...</p>
-        </div>
-        <div id="adminGaleriaWrap" class="comunidad-tab-content hidden">
-            <p class="guest-loading">Cargando recuerdos...</p>
-        </div>
-    </section>
 
     </main>
 

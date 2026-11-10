@@ -275,35 +275,26 @@ function escapeForJs(text) {
         .replaceAll("'", "\\'");
 }
 
-/* ───── Vista de Comunidad (consejos + galería) en el admin ───── */
+/* ───── Pestañas del admin: Invitaciones · Galería · Consejos ───── */
 function bindComunidadAdmin() {
-    const btnConsejos = document.getElementById('btnVerConsejos');
-    const btnGaleria = document.getElementById('btnVerGaleria');
-    const panel = document.getElementById('comunidadPanel');
-    const tabConsejos = document.getElementById('tabConsejos');
-    const tabGaleria = document.getElementById('tabGaleria');
-    const wrapConsejos = document.getElementById('adminConsejosWrap');
-    const wrapGaleria = document.getElementById('adminGaleriaWrap');
+    const tabs = document.querySelectorAll('#adminTabs .tab-btn');
+    const panels = {
+        invitaciones: document.getElementById('tabInvitaciones'),
+        galeria: document.getElementById('tabGaleria'),
+        consejos: document.getElementById('tabConsejos')
+    };
 
-    function openTab(tab) {
-        if (!panel) return;
-        panel.classList.remove('hidden');
-        panel.scrollIntoView({ behavior: 'smooth' });
+    function showTab(tab) {
+        tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+        Object.keys(panels).forEach(key => {
+            if (panels[key]) panels[key].classList.toggle('hidden', key !== tab);
+        });
 
-        const showConsejos = tab === 'consejos';
-        if (tabConsejos) tabConsejos.classList.toggle('active', showConsejos);
-        if (tabGaleria) tabGaleria.classList.toggle('active', !showConsejos);
-        if (wrapConsejos) wrapConsejos.classList.toggle('hidden', !showConsejos);
-        if (wrapGaleria) wrapGaleria.classList.toggle('hidden', showConsejos);
-
-        if (showConsejos) cargarConsejosAdmin();
-        else cargarGaleriaAdmin();
+        if (tab === 'galeria') cargarGaleriaAdmin();
+        if (tab === 'consejos') cargarConsejosAdmin();
     }
 
-    if (btnConsejos) btnConsejos.addEventListener('click', () => openTab('consejos'));
-    if (btnGaleria) btnGaleria.addEventListener('click', () => openTab('galeria'));
-    if (tabConsejos) tabConsejos.addEventListener('click', () => openTab('consejos'));
-    if (tabGaleria) tabGaleria.addEventListener('click', () => openTab('galeria'));
+    tabs.forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
 }
 
 async function cargarConsejosAdmin() {
