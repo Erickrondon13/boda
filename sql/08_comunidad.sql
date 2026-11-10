@@ -49,14 +49,21 @@ drop policy if exists "galeria_insert" on public.galeria;
 create policy "galeria_insert"
     on public.galeria for insert to anon, authenticated with check (true);
 
--- ───── Storage: bucket público para fotos/videos ─────
--- Si este INSERT falla (algunos proyectos restringen la creación por SQL),
--- crea el bucket "boda-media" manualmente en Storage > New bucket,
--- márcalo como "Public" y luego ejecuta solo las políticas de abajo.
-insert into storage.buckets (id, name, public)
-values ('boda-media', 'boda-media', true)
-on conflict (id) do update set public = true;
+-- ───── Storage: bucket público (opcional) ─────
+-- La creación del bucket por SQL puede fallar en algunos proyectos. Como el
+-- editor de Supabase ejecuta todo el script en UNA sola transacción, un error
+-- aquí abortaría también la creación de las tablas. Por eso se aísla en un
+-- bloque con EXCEPTION: si falla, las tablas y políticas de arriba SÍ se crean.
+do $$
+begin
+    insert into storage.buckets (id, name, public)
+    values ('boda-media', 'boda-media', true)
+    on conflict (id) do update set public = true;
+exception when others then
+    raise notice 'No se pudo crear el bucket automáticamente. Créalo manualmente en Storage como público (nombre: boda-media).';
+end $$;
 
+-- Políticas de Storage (no dependen de que el bucket ya exista).
 drop policy if exists "boda_media_select" on storage.objects;
 create policy "boda_media_select"
     on storage.objects for select to anon, authenticated

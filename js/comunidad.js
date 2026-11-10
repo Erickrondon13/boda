@@ -94,7 +94,7 @@ function setupConsejos() {
             cargarConsejos();
         } catch (err) {
             console.error(err);
-            showError('consejoError', 'No se pudo enviar tu mensaje. Intenta nuevamente.');
+            showError('consejoError', 'No se pudo enviar tu mensaje.' + errorDetail(err));
         }
     });
 }
@@ -201,7 +201,7 @@ function setupGaleria() {
             cargarGaleria(true);
         } catch (err) {
             console.error(err);
-            showError('galeriaError', 'No se pudo subir. Intenta con otro archivo o más tarde.');
+            showError('galeriaError', 'No se pudo subir' + errorDetail(err) + '. Intenta con otro archivo o más tarde.');
         } finally {
             hide('galeriaLoading');
             if (btn) btn.disabled = false;
@@ -287,4 +287,13 @@ function showError(id, message) {
     if (!el) return;
     el.textContent = message;
     el.classList.remove('hidden');
+}
+
+function errorDetail(err) {
+    if (!err) return '';
+    const parts = [];
+    if (err.code) parts.push(err.code);
+    if (err.message) parts.push(err.message);
+    if (err.statusCode) parts.push('HTTP ' + err.statusCode);
+    return parts.length ? ' (' + parts.join(' · ') + ')' : '';
 }
