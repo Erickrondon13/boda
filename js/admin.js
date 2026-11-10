@@ -1,5 +1,17 @@
 let allGuests = [];
 
+// Construye los links usando el dominio REAL desde donde se abre el admin,
+// en vez del dominio fijo que venía en la vista SQL.
+function buildInvitationLink(token) {
+    const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+    return base + '?id=' + token;
+}
+
+function buildEspecialLink(token) {
+    const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+    return base + 'especial.html?id=' + token;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     bindAdminEvents();
     loadGuests();
@@ -91,7 +103,7 @@ function renderTable(guests) {
     }
 
     tbody.innerHTML = guests.map(guest => {
-        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
+        const link = buildInvitationLink(guest.token);
 
         const especialBadge = guest.tipo_invitacion_especial
             ? `<span class="badge badge-especial">${escapeHtml(guest.tipo_invitacion_especial)}</span>`
@@ -105,7 +117,7 @@ function renderTable(guests) {
                 : `<span class="badge badge-pending">Pendiente</span>`)
             : `<span class="badge badge-pending">—</span>`;
 
-        const especialLink = guest.link_invitacion_especial || (PUBLIC_INVITATION_BASE_URL.replace('index.html', 'especial.html') + '?token=' + guest.token);
+        const especialLink = buildEspecialLink(guest.token);
 
         return `
             <tr>
@@ -140,37 +152,37 @@ function renderTable(guests) {
 async function copyText(text) {
     try {
         await navigator.clipboard.writeText(text);
-        alert('Copiado al portapapeles');
+        showToast('Copiado al portapapeles');
     } catch (error) {
         console.error(error);
-        alert('No se pudo copiar');
+        showToast('No se pudo copiar');
     }
 }
 
 async function copyAllLinks() {
     if (!allGuests.length) {
-        alert('No hay invitados cargados');
+        showToast('No hay invitados cargados');
         return;
     }
 
     const lines = allGuests.map(guest => {
-        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
+        const link = buildInvitationLink(guest.token);
         return `${guest.nombre_apellido}: ${link}`;
     });
     const text = lines.join('\n');
 
     try {
         await navigator.clipboard.writeText(text);
-        alert('Todos los links fueron copiados');
+        showToast('Todos los links fueron copiados');
     } catch (error) {
         console.error(error);
-        alert('No se pudo copiar la lista de links');
+        showToast('No se pudo copiar la lista de links');
     }
 }
 
 function exportGuestsCsv() {
     if (!allGuests.length) {
-        alert('No hay invitados para exportar');
+        showToast('No hay invitados para exportar');
         return;
     }
 
@@ -186,7 +198,7 @@ function exportGuestsCsv() {
     ];
 
     const rows = allGuests.map(guest => {
-        const link = guest.link_invitacion || (PUBLIC_INVITATION_BASE_URL + '?token=' + guest.token);
+        const link = buildInvitationLink(guest.token);
         return [
             csvValue(guest.nombre_apellido),
             csvValue(guest.cupos),
@@ -211,6 +223,20 @@ function exportGuestsCsv() {
     a.remove();
 
     URL.revokeObjectURL(url);
+}
+
+function showToast(message) {
+    let toast = document.getElementById('adminToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'adminToast';
+        toast.className = 'admin-toast';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
 function csvValue(value) {
