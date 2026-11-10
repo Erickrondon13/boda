@@ -44,11 +44,37 @@
 
 /* ───── Pestañas del admin (Invitaciones · Galería · Consejos) ───── */
 .admin-tabs {
-    display: flex;
-    gap: 12px;
+    display: inline-flex;
+    gap: 4px;
     justify-content: center;
-    margin: 4px 0 24px;
+    margin: 4px auto 26px;
+    padding: 6px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    width: fit-content;
+    max-width: 100%;
     flex-wrap: wrap;
+}
+
+.tab-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.92rem;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tab-btn:hover {
+    color: var(--gold-dark);
+    background: rgba(176, 141, 87, 0.10);
 }
 
 .tab-btn.active {
