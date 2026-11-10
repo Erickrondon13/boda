@@ -19,6 +19,8 @@
 
             <div class="admin-actions-top">
                 <a class="btn" href="comunidad.html">Comunidad (QR)</a>
+                <button class="btn" id="btnVerConsejos">Consejos y mensajes</button>
+                <button class="btn" id="btnVerGaleria">Galería</button>
                 <button class="btn" id="btnRefresh">Actualizar</button>
                 <button class="btn btn-primary" id="btnCopyAllLinks">Copiar todos los links</button>
                 <button class="btn" id="btnExportCsv">Exportar CSV</button>
@@ -95,6 +97,20 @@
                 </table>
             </div>
         </section>
+    <section class="admin-card hidden" id="comunidadPanel">
+        <h2>Comunidad</h2>
+        <div class="comunidad-tabs">
+            <button class="btn tab-btn active" id="tabConsejos" type="button">Consejos y mensajes</button>
+            <button class="btn tab-btn" id="tabGaleria" type="button">Galería</button>
+        </div>
+        <div id="adminConsejosWrap" class="comunidad-tab-content hidden">
+            <p class="guest-loading">Cargando mensajes...</p>
+        </div>
+        <div id="adminGaleriaWrap" class="comunidad-tab-content hidden">
+            <p class="guest-loading">Cargando recuerdos...</p>
+        </div>
+    </section>
+
     </main>
 
     <audio id="bgMusic" loop preload="auto">

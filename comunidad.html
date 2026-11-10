@@ -63,7 +63,7 @@
         <section class="card hidden" id="consejosPanel">
 
             <!-- Datos del regalo -->
-            <div class="regalo-box">
+            <!--div class="regalo-box">
                 <h3>💝 Datos para el regalo</h3>
                 <p class="regalo-sub">
                     Tu presencia es el mejor regalo, pero si deseas acompañarnos con un aporte
@@ -77,7 +77,7 @@
                     <li><strong>Concepto:</strong> Boda Erick &amp; Telma</li>
                 </ul>
                 <p class="regalo-nota">También puedes dejar tu sobre en el buzón de recepción ✉️</p>
-            </div>
+            </div-->
 
             <!-- Formulario de consejo / mensaje -->
             <div class="consejo-form-box">
@@ -111,13 +111,6 @@
                 </div>
             </div>
 
-            <!-- Muro de mensajes -->
-            <div class="muro-consejos">
-                <h3>Mensajes y consejos de nuestros invitados</h3>
-                <div id="listaConsejos" class="consejos-grid">
-                    <p class="guest-loading">Cargando...</p>
-                </div>
-            </div>
         </section>
 
         <!-- OPCIÓN 2: GALERÍA -->
@@ -135,8 +128,8 @@
                         <input type="text" id="galeriaAutor" placeholder="Anónimo" maxlength="60" />
                     </div>
                     <div class="form-group">
-                        <label for="galeriaFile">Foto o video</label>
-                        <input type="file" id="galeriaFile" accept="image/*,video/*" required />
+                        <label for="galeriaFile">Fotos o videos (puedes elegir varios)</label>
+                        <input type="file" id="galeriaFile" accept="image/*,video/*" multiple required />
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" id="btnSubir">Subir recuerdo</button>
                 </form>

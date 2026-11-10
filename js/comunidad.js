@@ -156,55 +156,70 @@ function setupGaleria() {
         hide('galeriaSuccess');
 
         const fileInput = document.getElementById('galeriaFile');
-        const file = fileInput.files && fileInput.files[0];
+        const files = (fileInput.files && fileInput.files.length)
+            ? Array.from(fileInput.files)
+            : [];
 
-        if (!file) {
-            showError('galeriaError', 'Selecciona una foto o video.');
+        if (files.length === 0) {
+            showError('galeriaError', 'Selecciona al menos una foto o video.');
             return;
         }
 
-        if (file.size > MAX_FILE_MB * 1024 * 1024) {
-            showError('galeriaError', 'El archivo es muy grande (máximo ' + MAX_FILE_MB + ' MB).');
+        const tooBig = files.find(function (f) { return f.size > MAX_FILE_MB * 1024 * 1024; });
+        if (tooBig) {
+            showError('galeriaError', 'El archivo "' + tooBig.name + '" es muy grande (máximo ' + MAX_FILE_MB + ' MB).');
             return;
         }
 
         const autor = document.getElementById('galeriaAutor').value.trim() || 'Anónimo';
         const btn = document.getElementById('btnSubir');
+        const loading = document.getElementById('galeriaLoading');
         show('galeriaLoading');
-        if (btn) btn.disabled = true;
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Subiendo...';
+        }
 
         try {
-            const extension = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
-            const path = 'media/' + Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + extension;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (loading) loading.textContent = 'Subiendo ' + (i + 1) + ' de ' + files.length + '...';
 
-            const { error: uploadError } = await supabaseClient.storage
-                .from(COMUNIDAD_BUCKET)
-                .upload(path, file, { cacheControl: '3600', upsert: false });
+                const extension = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
+                const path = 'media/' + Date.now() + '-' + Math.random().toString(36).slice(2) + '.' + extension;
 
-            if (uploadError) throw uploadError;
+                const { error: uploadError } = await supabaseClient.storage
+                    .from(COMUNIDAD_BUCKET)
+                    .upload(path, file, { cacheControl: '3600', upsert: false });
 
-            const { data: urlData } = supabaseClient.storage
-                .from(COMUNIDAD_BUCKET)
-                .getPublicUrl(path);
+                if (uploadError) throw uploadError;
 
-            const url = urlData.publicUrl;
-            const tipo = file.type.indexOf('video') === 0 ? 'video' : 'imagen';
+                const { data: urlData } = supabaseClient.storage
+                    .from(COMUNIDAD_BUCKET)
+                    .getPublicUrl(path);
 
-            const { error: insertError } = await supabaseClient
-                .from('galeria')
-                .insert({ autor: autor, url: url, tipo: tipo });
+                const url = urlData.publicUrl;
+                const tipo = file.type.indexOf('video') === 0 ? 'video' : 'imagen';
 
-            if (insertError) throw insertError;
+                const { error: insertError } = await supabaseClient
+                    .from('galeria')
+                    .insert({ autor: autor, url: url, tipo: tipo });
+
+                if (insertError) throw insertError;
+            }
 
             form.reset();
             show('galeriaSuccess');
             cargarGaleria(true);
         } catch (err) {
             console.error(err);
-            showError('galeriaError', 'No se pudo subir' + errorDetail(err) + '. Intenta con otro archivo o más tarde.');
+            showError('galeriaError', 'No se pudo subir' + errorDetail(err) + '. Intenta de nuevo.');
         } finally {
             hide('galeriaLoading');
-            if (btn) btn.disabled = false;
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Subir recuerdo';
+            }
         }
     });
 }

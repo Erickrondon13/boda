@@ -15,6 +15,7 @@ function buildEspecialLink(token) {
 document.addEventListener('DOMContentLoaded', () => {
     bindAdminEvents();
     loadGuests();
+    bindComunidadAdmin();
 });
 
 function bindAdminEvents() {
@@ -272,4 +273,103 @@ function escapeForJs(text) {
     return String(text || '')
         .replaceAll('\\', '\\\\')
         .replaceAll("'", "\\'");
+}
+
+/* ───── Vista de Comunidad (consejos + galería) en el admin ───── */
+function bindComunidadAdmin() {
+    const btnConsejos = document.getElementById('btnVerConsejos');
+    const btnGaleria = document.getElementById('btnVerGaleria');
+    const panel = document.getElementById('comunidadPanel');
+    const tabConsejos = document.getElementById('tabConsejos');
+    const tabGaleria = document.getElementById('tabGaleria');
+    const wrapConsejos = document.getElementById('adminConsejosWrap');
+    const wrapGaleria = document.getElementById('adminGaleriaWrap');
+
+    function openTab(tab) {
+        if (!panel) return;
+        panel.classList.remove('hidden');
+        panel.scrollIntoView({ behavior: 'smooth' });
+
+        const showConsejos = tab === 'consejos';
+        if (tabConsejos) tabConsejos.classList.toggle('active', showConsejos);
+        if (tabGaleria) tabGaleria.classList.toggle('active', !showConsejos);
+        if (wrapConsejos) wrapConsejos.classList.toggle('hidden', !showConsejos);
+        if (wrapGaleria) wrapGaleria.classList.toggle('hidden', showConsejos);
+
+        if (showConsejos) cargarConsejosAdmin();
+        else cargarGaleriaAdmin();
+    }
+
+    if (btnConsejos) btnConsejos.addEventListener('click', () => openTab('consejos'));
+    if (btnGaleria) btnGaleria.addEventListener('click', () => openTab('galeria'));
+    if (tabConsejos) tabConsejos.addEventListener('click', () => openTab('consejos'));
+    if (tabGaleria) tabGaleria.addEventListener('click', () => openTab('galeria'));
+}
+
+async function cargarConsejosAdmin() {
+    const wrap = document.getElementById('adminConsejosWrap');
+    if (!wrap || wrap.dataset.loaded === '1') return;
+    wrap.dataset.loaded = '1';
+    wrap.innerHTML = '<p class="guest-loading">Cargando mensajes...</p>';
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('consejos')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            wrap.innerHTML = '<p class="guest-loading">Aún no hay mensajes.</p>';
+            return;
+        }
+
+        const icons = { mensaje: '💌', consejo: '💡', anecdota: '📖', deseo: '🌟', cancion: '🎵', lugar: '📍' };
+        wrap.innerHTML = '<div class="admin-consejos-grid">' + data.map(c => {
+            const icon = icons[c.tipo] || '💬';
+            return '<div class="admin-consejo-item">' +
+                '<div class="consejo-icon">' + icon + '</div>' +
+                '<p class="consejo-text">' + escapeHtml(c.mensaje) + '</p>' +
+                '<p class="consejo-autor">— ' + escapeHtml(c.nombre) + '</p>' +
+                '</div>';
+        }).join('') + '</div>';
+    } catch (err) {
+        console.error(err);
+        wrap.dataset.loaded = '0';
+        wrap.innerHTML = '<p class="guest-loading">No se pudieron cargar los mensajes.</p>';
+    }
+}
+
+async function cargarGaleriaAdmin() {
+    const wrap = document.getElementById('adminGaleriaWrap');
+    if (!wrap || wrap.dataset.loaded === '1') return;
+    wrap.dataset.loaded = '1';
+    wrap.innerHTML = '<p class="guest-loading">Cargando recuerdos...</p>';
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('galeria')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            wrap.innerHTML = '<p class="guest-loading">Aún no hay recuerdos.</p>';
+            return;
+        }
+
+        wrap.innerHTML = '<div class="admin-galeria-grid">' + data.map(item => {
+            const media = item.tipo === 'video'
+                ? '<video src="' + item.url + '" controls playsinline></video>'
+                : '<img src="' + item.url + '" alt="Recuerdo de ' + escapeHtml(item.autor) + '" loading="lazy" />';
+            return '<div class="admin-galeria-item">' + media +
+                '<p class="galeria-autor">📷 ' + escapeHtml(item.autor) + '</p></div>';
+        }).join('') + '</div>';
+    } catch (err) {
+        console.error(err);
+        wrap.dataset.loaded = '0';
+        wrap.innerHTML = '<p class="guest-loading">No se pudieron cargar los recuerdos.</p>';
+    }
 }
