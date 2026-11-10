@@ -31,9 +31,8 @@ insert into public.invitados (nombre_apellido, cupos) values
 ('Jenine Fryling & Jorge Marin', 2);
 
 
-insert into public.invitados (nombre_apellido, cupos) values 
-('Daniel Zapata', 1),
-('Emanuel Usme Casas', 1);
+insert into public.invitados (nombre_apellido, cupos) values  
+('Harold Romaña', 1);
 
 
 

@@ -5,6 +5,7 @@
   "rewrites": [
     { "source": "/admin.html", "destination": "/admin.html" },
     { "source": "/especial.html", "destination": "/especial.html" },
+    { "source": "/comunidad.html", "destination": "/comunidad.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [

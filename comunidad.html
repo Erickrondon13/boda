@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comunidad | Erick & Telma</title>
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+    <!-- Open Graph / WhatsApp -->
+    <meta property="og:title" content="Comunidad | Erick & Telma" />
+    <meta property="og:description" content="Deja un consejo a los novios o comparte tus fotos y videos de la boda." />
+    <meta property="og:image" content="https://erickrondon13.github.io/boda/assets/banner.jpeg" />
+    <meta property="og:url" content="https://erickrondon13.github.io/boda/comunidad.html" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/comunidad.css" />
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Librería QR (se usa solo para mostrar el código en pantalla; si falla, se muestra el QR de respaldo) -->
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+</head>
+<body>
+
+    <main class="wedding-page comunidad-page">
+
+        <!-- HERO -->
+        <section class="hero comunidad-hero">
+            <div class="hero-overlay"></div>
+            <img src="assets/banner.jpeg" alt="Erick y Telma" class="hero-image" width="1600" height="900" decoding="async" />
+            <div class="hero-content">
+                <p class="hero-kicker">Comparte este día con nosotros</p>
+                <h1>Erick <span>&</span> Telma</h1>
+                <p class="hero-date-main">15 · 11 · 2026</p>
+            </div>
+        </section>
+
+        <!-- OPCIONES -->
+        <section class="card opciones-card">
+            <h2>Elige una opción</h2>
+            <p class="opciones-sub">Escaneaste el código de la fiesta. Aquí puedes dejarle algo a los novios o compartir tus recuerdos.</p>
+            <div class="opciones-grid">
+                <button class="opcion-btn" id="btnConsejos" type="button">
+                    <span class="opcion-icon">💌</span>
+                    <span class="opcion-title">Consejos y más</span>
+                    <span class="opcion-desc">Déjanos un mensaje o consejo, y mira los datos del regalo.</span>
+                </button>
+                <button class="opcion-btn" id="btnGaleria" type="button">
+                    <span class="opcion-icon">📸</span>
+                    <span class="opcion-title">Galería de la boda</span>
+                    <span class="opcion-desc">Sube tus fotos y videos para que los novios queden con los recuerdos.</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- OPCIÓN 1: CONSEJOS Y MÁS -->
+        <section class="card hidden" id="consejosPanel">
+
+            <!-- Datos del regalo -->
+            <div class="regalo-box">
+                <h3>💝 Datos para el regalo</h3>
+                <p class="regalo-sub">
+                    Tu presencia es el mejor regalo, pero si deseas acompañarnos con un aporte
+                    para esta nueva etapa, lo recibiremos con mucho cariño.
+                </p>
+                <ul class="regalo-list">
+                    <li><strong>Banco:</strong> [Nombre del banco]</li>
+                    <li><strong>Titular:</strong> Erick Rondón / Telma Verónica</li>
+                    <li><strong>Cuenta:</strong> [Número de cuenta]</li>
+                    <li><strong>Tipo:</strong> [Ahorros / Corriente]</li>
+                    <li><strong>Concepto:</strong> Boda Erick &amp; Telma</li>
+                </ul>
+                <p class="regalo-nota">También puedes dejar tu sobre en el buzón de recepción ✉️</p>
+            </div>
+
+            <!-- Formulario de consejo / mensaje -->
+            <div class="consejo-form-box">
+                <h3>Déjanos un consejo o mensaje</h3>
+                <form id="consejoForm">
+                    <div class="form-group">
+                        <label for="consejoNombre">Tu nombre (opcional)</label>
+                        <input type="text" id="consejoNombre" placeholder="Anónimo" maxlength="60" />
+                    </div>
+                    <div class="form-group">
+                        <label for="consejoTipo">¿Qué quieres dejar?</label>
+                        <select id="consejoTipo">
+                            <option value="mensaje">Un mensaje bonito</option>
+                            <option value="consejo">Un consejo para los novios</option>
+                            <option value="anecdota">Una anécdota que recordamos</option>
+                            <option value="deseo">Un deseo para su futuro</option>
+                            <option value="cancion">Una canción recomendada</option>
+                            <option value="lugar">Un lugar a visitar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="consejoMensaje">Tu mensaje</label>
+                        <textarea id="consejoMensaje" rows="4" required placeholder="Escribe algo especial..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Enviar</button>
+                </form>
+                <div id="consejoError" class="error-box hidden"></div>
+                <div id="consejoSuccess" class="success-box hidden">
+                    <h3>💌 ¡Gracias!</h3>
+                    <p>Tu mensaje quedó registrado para los novios.</p>
+                </div>
+            </div>
+
+            <!-- Muro de mensajes -->
+            <div class="muro-consejos">
+                <h3>Mensajes y consejos de nuestros invitados</h3>
+                <div id="listaConsejos" class="consejos-grid">
+                    <p class="guest-loading">Cargando...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- OPCIÓN 2: GALERÍA -->
+        <section class="card hidden" id="galeriaPanel">
+            <h2>Galería de la boda</h2>
+            <p class="intro-text">
+                Sube las fotos y videos que capturaste este día. Así los novios quedan
+                con todos los recuerdos. 💛
+            </p>
+
+            <div class="subida-box">
+                <form id="galeriaForm">
+                    <div class="form-group">
+                        <label for="galeriaAutor">Tu nombre (opcional)</label>
+                        <input type="text" id="galeriaAutor" placeholder="Anónimo" maxlength="60" />
+                    </div>
+                    <div class="form-group">
+                        <label for="galeriaFile">Foto o video</label>
+                        <input type="file" id="galeriaFile" accept="image/*,video/*" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" id="btnSubir">Subir recuerdo</button>
+                </form>
+                <div id="galeriaLoading" class="guest-loading hidden">Subiendo, por favor espera...</div>
+                <div id="galeriaError" class="error-box hidden"></div>
+                <div id="galeriaSuccess" class="success-box hidden">
+                    <h3>✅ ¡Subido!</h3>
+                    <p>Gracias por compartir este recuerdo con los novios.</p>
+                </div>
+            </div>
+
+            <div id="galeriaGrid" class="galeria-grid">
+                <p class="guest-loading">Cargando recuerdos...</p>
+            </div>
+        </section>
+
+        <!-- COMPARTIR (QR para los novios) -->
+        <section class="card compartir-box">
+            <h2>Comparte este código</h2>
+            <p class="intro-text">
+                Muestra este código QR en la entrada o en las mesas para que los invitados
+                abran esta página desde su celular.
+            </p>
+            <div class="qr-wrap">
+                <div id="qrBox"></div>
+                <img id="qrFallback" class="qr-img hidden" src="assets/qr-comunidad.png" alt="Código QR de la comunidad" />
+            </div>
+            <p id="compartirUrl" class="compartir-url"></p>
+            <button type="button" class="btn" id="btnCopiarUrl">Copiar enlace</button>
+        </section>
+    </main>
+
+    <audio id="bgMusic" loop preload="none">
+        <source src="assets/base.webm" type="audio/webm" />
+        <source src="assets/base.mp3" type="audio/mpeg" />
+    </audio>
+
+    <button class="music-btn" id="musicBtn" title="Play / Pause">♪</button>
+
+    <script src="js/supabase.js"></script>
+    <script src="js/comunidad.js"></script>
+    <script src="js/overlay.js"></script>
+</body>
+</html>
